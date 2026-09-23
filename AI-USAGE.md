@@ -11,6 +11,7 @@ looks exactly like what it is.
 
 At least six entries. One per real use. Every entry needs a commit link.
 
+#template
 ### YYYY-MM-DD - short title
 
 - **Tool:**
@@ -18,6 +19,14 @@ At least six entries. One per real use. Every entry needs a commit link.
 - **What it gave back:**
 - **What I kept, what I changed, and why:**
 - **Commit:** https://github.com/YOUR-USERNAME/YOUR-REPO/commit/SHA
+
+### 2026-09-23 - Initial project set up
+
+- **Tool:** ChatGPT (OpenAI)
+- **What I asked for:** I shared my existing Sipori project plan, design decisions, course requirements, and the provided final project template with ChatGPT. I asked it to review the setup process and help me organize the first development steps based on the course instructions.
+- **What it gave back:** I used the response as a checklist to confirm the order of the initial setup: run the provided template locally, personalize it for Sipori, keep the existing demo-mode API structure, deploy the starter version, and document progress as I go.
+- **What I kept, what I changed, and why:** The project concept, user flow, screens, component structure, state plan, visual design, responsive behaviour, and technology requirements were already planned before using ChatGPT. I followed the course's provided template and START-HERE.md as the main source for the technical setup rather than replacing its structure with an AI-generated one.
+- **Commit:** 
 
 ## 2. Where the AI got it wrong
 

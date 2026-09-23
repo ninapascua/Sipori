@@ -1,10 +1,10 @@
-# Your Project Name
+# Sipori
 
 > **Replace this whole file.** It is a worked example of the README your project
 > will be graded from, not a file to leave as it is. Start with
 > [START-HERE.md](START-HERE.md).
 
-One sentence saying what this does and who it is for.
+Sipori is a personal log for discovering, rating, and keeping track of matcha and hojicha drinks.
 
 **Live site:** https://yourusername.github.io/your-repo-name/
 **API:** https://your-api.onrender.com/healthz
@@ -18,9 +18,11 @@ One sentence saying what this does and who it is for.
 
 ## What it does
 
-- Report a sighting with a place, a description and a spookiness rating
-- Browse everything reported, newest first
-- Delete a report
+- Keep a personal log of cafés and the matcha or hojicha drinks tried at each one
+- Record drink details including type, price, rating, reorder choice, notes and date
+- Browse cafés and see the number of drinks logged and their average rating
+- Search for cafés and filter drinks by matcha or hojicha
+- Look back on past drinks through a monthly scrapbook
 
 ## Built with
 
@@ -90,7 +92,9 @@ Check the API on its own before you blame the client:
 
     curl http://localhost:3000/healthz     # is the process alive
     curl http://localhost:3000/readyz      # is the database reachable
-    curl http://localhost:3000/api/sightings
+    curl http://localhost:3000/api/cafes
+    curl http://localhost:3000/api/drinks
+
 
 ## Environment variables
 
