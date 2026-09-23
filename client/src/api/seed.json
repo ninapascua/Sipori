@@ -1,8 +1,158 @@
-[
-  { "id": "seed-1", "place": "Library, third floor", "description": "Chairs rearranged overnight, every time. The night guard says he locks the room himself.", "spookiness": 3, "reported_at": "2026-08-01T14:20:00.000Z" },
-  { "id": "seed-2", "place": "Old gym", "description": "Lights flicker in a fixed pattern after 9pm, always three short and one long.", "spookiness": 4, "reported_at": "2026-08-03T11:05:00.000Z" },
-  { "id": "seed-3", "place": "Parking basement", "description": "Footsteps with no one there. Reported separately by three different people in one week, which is what makes this one hard to dismiss. Two of them were alone at the time and did not know about the others. This entry is deliberately long, because a seed row of four words hides every text-wrapping bug you have.", "spookiness": 5, "reported_at": "2026-08-05T22:40:00.000Z" },
-  { "id": "seed-4", "place": "Canteen", "description": "A cold spot near the back door, every morning before seven.", "spookiness": 1, "reported_at": "2026-08-06T07:15:00.000Z" },
-  { "id": "seed-5", "place": "AB Building stairwell", "description": "", "spookiness": 2, "reported_at": "2026-08-08T18:30:00.000Z" },
-  { "id": "seed-6", "place": "Chapel garden", "description": "Someone humming. Stops the moment you turn around.", "spookiness": 3, "reported_at": "2026-08-10T05:50:00.000Z" }
-]
+{
+  "cafes": [
+    {
+      "id": "cafe-1",
+      "name": "Matcha Tokyo"
+    },
+    {
+      "id": "cafe-2",
+      "name": "Mori Café"
+    },
+    {
+      "id": "cafe-3",
+      "name": "Kissa House"
+    },
+    {
+      "id": "cafe-4",
+      "name": "Midori"
+    },
+    {
+      "id": "cafe-5",
+      "name": "Tsuki Café"
+    }
+  ],
+  "drinks": [
+    {
+      "id": "drink-1",
+      "cafeId": "cafe-1",
+      "name": "Strawberry Matcha Latte",
+      "type": "matcha",
+      "price": 185,
+      "rating": 5,
+      "reorder": true,
+      "notes": "Creamy matcha with a sweet strawberry layer.",
+      "date": "2026-09-18",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-2",
+      "cafeId": "cafe-1",
+      "name": "Classic Matcha Latte",
+      "type": "matcha",
+      "price": 160,
+      "rating": 4,
+      "reorder": true,
+      "notes": "Smooth and not too sweet.",
+      "date": "2026-09-10",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-3",
+      "cafeId": "cafe-1",
+      "name": "Hojicha Latte",
+      "type": "hojicha",
+      "price": 170,
+      "rating": 4,
+      "reorder": true,
+      "notes": "Roasty and comforting.",
+      "date": "2026-08-26",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-4",
+      "cafeId": "cafe-2",
+      "name": "Dirty Matcha",
+      "type": "matcha",
+      "price": 190,
+      "rating": 3,
+      "reorder": false,
+      "notes": "Good matcha but the coffee overpowered it.",
+      "date": "2026-09-14",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-5",
+      "cafeId": "cafe-2",
+      "name": "Brown Sugar Hojicha",
+      "type": "hojicha",
+      "price": 175,
+      "rating": 5,
+      "reorder": true,
+      "notes": "Deep roasted flavour with just enough sweetness.",
+      "date": "2026-08-20",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-6",
+      "cafeId": "cafe-3",
+      "name": "Matcha Cloud",
+      "type": "matcha",
+      "price": 195,
+      "rating": 5,
+      "reorder": true,
+      "notes": "Thick matcha with a light cream topping.",
+      "date": "2026-09-08",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-7",
+      "cafeId": "cafe-3",
+      "name": "Iced Hojicha",
+      "type": "hojicha",
+      "price": 155,
+      "rating": 3,
+      "reorder": false,
+      "notes": "Refreshing but a little too mild.",
+      "date": "2026-08-12",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-8",
+      "cafeId": "cafe-4",
+      "name": "Matcha Cream Latte",
+      "type": "matcha",
+      "price": 180,
+      "rating": 4,
+      "reorder": true,
+      "notes": "Creamy with a slightly bitter finish.",
+      "date": "2026-09-05",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-9",
+      "cafeId": "cafe-4",
+      "name": "Hojicha Cream Latte",
+      "type": "hojicha",
+      "price": 180,
+      "rating": 4,
+      "reorder": true,
+      "notes": "Nutty and smooth.",
+      "date": "2026-08-05",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-10",
+      "cafeId": "cafe-5",
+      "name": "Vanilla Matcha",
+      "type": "matcha",
+      "price": 165,
+      "rating": 3,
+      "reorder": false,
+      "notes": "A little sweeter than I prefer.",
+      "date": "2026-09-02",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-11",
+      "cafeId": "cafe-5",
+      "name": "Sea Salt Hojicha",
+      "type": "hojicha",
+      "price": 185,
+      "rating": 5,
+      "reorder": true,
+      "notes": "The salty cream worked really well with the roasted tea.",
+      "date": "2026-08-01",
+      "photoUrl": ""
+    }
+  ]
+}

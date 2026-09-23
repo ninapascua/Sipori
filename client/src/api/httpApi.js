@@ -26,15 +26,17 @@ async function request(path, options) {
   return response.status === 204 ? null : response.json()
 }
 
-export const listSightings = () => request('/api/sightings')
+export const listCafes = () =>
+  request('/api/cafes')
 
-export const getSighting = (id) => request(`/api/sightings/${id}`)
+export const getCafe = (id) =>
+  request(`/api/cafes/${id}`)
 
-export const createSighting = (input) =>
-  request('/api/sightings', { method: 'POST', body: JSON.stringify(input) })
+export const listDrinks = () =>
+  request('/api/drinks')
 
-export const updateSighting = (id, input) =>
-  request(`/api/sightings/${id}`, { method: 'PUT', body: JSON.stringify(input) })
+export const listDrinksByCafe = (cafeId) =>
+  request(`/api/cafes/${cafeId}/drinks`)
 
-export const deleteSighting = (id) =>
-  request(`/api/sightings/${id}`, { method: 'DELETE' })
+export const getDrink = (id) =>
+  request(`/api/drinks/${id}`)

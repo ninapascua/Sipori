@@ -3,32 +3,18 @@
    you chose and can defend. */
 
 :root {
-  color-scheme: light dark;
-  --bg: #fbfbfd;
-  --fg: #1a1a1f;
-  --muted: #5c5c6b;
-  --line: #dcdce6;
-  --card: #ffffff;
-  --accent: #4a3f8f;
-  --warn-bg: #fff6dd;
-  --warn-line: #e0bf6a;
-  --error-bg: #fdeaea;
-  --error-line: #d98a8a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #14141a;
-    --fg: #ececf2;
-    --muted: #a0a0b0;
-    --line: #33333f;
-    --card: #1d1d25;
-    --accent: #a99cf0;
-    --warn-bg: #3a3320;
-    --warn-line: #7d6a30;
-    --error-bg: #3a2323;
-    --error-line: #7d4040;
-  }
+  color-scheme: light;
+  --bg: #F2EBDB;
+  --fg: #350B0C;
+  --muted: #203814;
+  --line: #350B0C;
+  --card: #96A272;
+  --accent: #203814;
+  --pink: #FBC1C8;
+  --warn-bg: #F2EBDB;
+  --warn-line: #96A272;
+  --error-bg: #FBC1C8;
+  --error-line: #350B0C;
 }
 
 * { box-sizing: border-box; }
@@ -37,7 +23,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 16px/1.6 'Buenard', Georgia, serif;
 }
 
 .page { max-width: 44rem; margin: 0 auto; padding: 2rem 1rem 4rem; }
@@ -124,4 +110,294 @@ button:disabled { opacity: .6; cursor: default; }
   background: transparent;
   color: var(--muted);
   border-color: var(--line);
+}
+
+/* Sipori's home wireframe: three columns and a separate add panel on desktop.
+   Keep the demo notice visible, even though it is not part of the wireframe. */
+.app {
+  max-width: 1456px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 30px clamp(20px, 5vw, 75px) 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header { display: flex; align-items: center; gap: 8px; }
+.logo, .site-footer > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--line);
+  background: #eee;
+  color: var(--fg);
+  text-decoration: none;
+  font-weight: 700;
+}
+.logo { min-width: 80px; min-height: 65px; padding: 10px; }
+.nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 60px;
+  flex: 1;
+  border-bottom: 2px solid var(--line);
+  padding-right: 28px;
+}
+.nav-link {
+  color: inherit;
+  text-decoration: none;
+  padding: 8px 10px 12px;
+  border-bottom: 4px solid transparent;
+  margin-bottom: -2px;
+}
+.nav-link.active { border-color: var(--line); font-weight: 700; }
+.nav-link:hover { background: #f4f4f4; }
+.menu-toggle { display: none; }
+.demo-notice { font-size: .8rem; line-height: 1.5; margin: 22px 0 0; }
+
+.main-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 26%);
+  column-gap: clamp(35px, 8vw, 115px);
+  row-gap: 54px;
+  align-content: start;
+  padding: 32px 0 60px clamp(0px, 5vw, 80px);
+  flex: 1;
+}
+.page-heading { grid-column: 1; display: flex; align-items: center; gap: 24px; }
+.page-heading h1 {
+  margin: 0;
+  border: 2px solid var(--line);
+  background: #eee;
+  padding: 10px 18px;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+.search { position: relative; flex: 1; min-width: 0; margin: 0; }
+.search input {
+  width: 100%;
+  min-height: 40px;
+  border: 2px solid var(--line);
+  border-radius: 24px;
+  padding: 6px 40px 6px 16px;
+}
+/* A CSS magnifying glass keeps the placeholder free of emoji assets. */
+.search::before {
+  content: '';
+  position: absolute;
+  right: 17px;
+  top: 12px;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.search::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 25px;
+  width: 9px;
+  height: 2px;
+  background: var(--line);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.cafe-grid {
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 180px));
+  justify-content: space-between;
+  gap: 70px 24px;
+  align-content: start;
+}
+.cafe-card { min-width: 0; padding: 7px; border: 2px solid var(--line); border-radius: 8px; }
+.cafe-card-image {
+  aspect-ratio: 1.8;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background:
+    linear-gradient(to top right, transparent 49.5%, #aaa 50%, transparent 50.5%),
+    linear-gradient(to bottom right, transparent 49.5%, #aaa 50%, transparent 50.5%), #eee;
+}
+.cafe-card-image h2 {
+  margin: 0;
+  padding: 1px 5px;
+  background: white;
+  font-size: .9rem;
+  font-weight: 500;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.cafe-card-content { padding-top: 7px; text-align: center; font-size: .75rem; }
+.cafe-card-content p { margin: 4px 0; }
+.rating { letter-spacing: .03em; }
+.add-cafe-card {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: start;
+  margin: 66px 0 0;
+  min-height: 400px;
+  width: 100%;
+  border: 2px dashed var(--line);
+  border-radius: 16px;
+  background: #f4f4f4;
+  color: var(--fg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.add-cafe-card:hover { background: #e9e9e9; }
+.add-icon { font-size: 2.7rem; line-height: 1.3; font-weight: 400; }
+.status-message, .main-content > .error { grid-column: 1; margin: 0; }
+.site-footer { border-top: 2px solid var(--line); padding-top: 14px; }
+.site-footer > span { min-width: 75px; min-height: 34px; font-size: .75rem; }
+
+/* The phone wireframe moves Add shop beside search and uses two card columns.
+   Navigation stays keyboard-accessible through the expandable menu. */
+@media (max-width: 760px) {
+  .app { padding: 22px 20px 18px; }
+  .site-header { position: relative; justify-content: space-between; }
+  .logo { min-width: 120px; min-height: 50px; }
+  .menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    align-self: center;
+  }
+  .menu-toggle span { width: 28px; height: 2px; background: var(--line); }
+  .nav { display: none; }
+  .nav.is-open {
+    display: flex;
+    position: absolute;
+    z-index: 2;
+    top: calc(100% + 8px);
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px;
+    background: white;
+    border: 2px solid var(--line);
+  }
+  .main-content { grid-template-columns: minmax(0, 1fr) 90px; gap: 30px 16px; padding: 28px 10px 48px; }
+  .page-heading { display: contents; }
+  .search { grid-column: 1; grid-row: 1; align-self: center; }
+  .search input { font-size: 16px; }
+  .page-heading h1 { grid-column: 1 / -1; grid-row: 2; justify-self: start; font-size: 1rem; padding: 4px 16px; }
+  .add-cafe-card { grid-column: 2; grid-row: 1; margin: 0; min-height: 90px; font-size: .75rem; padding: 8px; }
+  .add-icon { font-size: 1.8rem; }
+  .cafe-grid { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 20px; }
+  .status-message, .main-content > .error { grid-column: 1 / -1; }
+}
+/* High-fidelity theme from the supplied Home/Shops artwork. The responsive
+   wireframe rules above still define the layout; these rules apply the brand.
+   Fonts load through Google Fonts in index.html, with local serif fallbacks. */
+.logo, .site-footer > span { border: 0; background: transparent; padding: 0; }
+.logo { width: 84px; min-width: 84px; min-height: 84px; }
+.logo img { display: block; width: 84px; height: 84px; object-fit: contain; }
+.site-footer > span { width: 88px; }
+.site-footer img { display: block; width: 88px; height: auto; }
+.nav { border-bottom: 1px solid var(--card); font-size: 1.1rem; }
+.nav-link { text-transform: lowercase; border-bottom-width: 2px; }
+.nav-link.active { font-weight: 400; }
+.nav-link:hover { background: var(--pink); }
+.demo-notice { color: var(--muted); border-radius: 4px; }
+.page-heading h1 {
+  border: 0;
+  background: transparent;
+  padding: 0 8px 0 0;
+  font-family: 'Luxurious Script', 'Brush Script MT', cursive;
+  font-size: clamp(3.4rem, 5vw, 4.6rem);
+  font-weight: 400;
+  line-height: 1.2;
+  text-transform: lowercase;
+}
+.search input { background: var(--bg); color: var(--fg); }
+.search input::placeholder { color: var(--fg); opacity: .7; }
+.cafe-grid { row-gap: 80px; }
+.cafe-card {
+  background: var(--card);
+  border: 0;
+  border-radius: 12px;
+  padding: 9px;
+  box-shadow: 0 3px 3px #350b0c40;
+}
+/* The supplied cafe image is decorative sample art, not a photo of each shop. */
+.cafe-card-image {
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(#fbc1c880, #fbc1c880), url('./assets/cafe-art.png') center / cover;
+}
+.cafe-card-image h2 {
+  background: transparent;
+  color: var(--fg);
+  font-size: clamp(1.15rem, 1.7vw, 1.65rem);
+  font-weight: 700;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+.cafe-card-content { font-size: .85rem; padding-top: 8px; }
+.cafe-card-content p { margin: 5px 0; }
+.add-cafe-card {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  min-height: 440px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+  text-transform: lowercase;
+}
+/* Clip only the decorative layer so the button keeps a visible focus outline. */
+.add-cafe-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 -24px;
+  z-index: -1;
+  background: var(--card);
+  clip-path: polygon(50% 0, 57% 32%, 81% 9%, 68% 38%, 100% 25%, 73% 50%, 100% 75%, 68% 62%, 81% 91%, 57% 68%, 50% 100%, 43% 68%, 19% 91%, 32% 62%, 0 75%, 27% 50%, 0 25%, 32% 38%, 19% 9%, 43% 32%);
+  transition: background-color 150ms ease;
+}
+.add-cafe-card:hover { background: transparent; }
+.add-cafe-card:hover::before { background: var(--pink); }
+.add-icon { font-size: 3.6rem; line-height: 1; }
+.site-footer { border-top: 1px solid var(--card); }
+
+@media (max-width: 760px) {
+  .logo, .logo img { width: 65px; min-width: 65px; height: 65px; min-height: 65px; }
+  .nav.is-open { background: var(--bg); border-color: var(--card); }
+  .page-heading h1 { font-size: 3.4rem; padding: 0; }
+  .cafe-grid { gap: 32px 18px; }
+  .cafe-card-image h2 { font-size: clamp(1rem, 4.5vw, 1.5rem); }
+  .cafe-card-content { font-size: .8rem; }
+  .add-cafe-card { min-height: 100px; margin: 0; font-size: .75rem; padding: 0; }
+  .add-cafe-card::before { inset: -6px; }
+  .add-icon { font-size: 1.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .add-cafe-card::before { transition: none; }
 }

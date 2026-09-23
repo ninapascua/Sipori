@@ -10,7 +10,7 @@
 
 import seed from './seed.json'
 
-const KEY = 'final-project:sightings'
+const KEY = 'sipori:data'
 
 // A real network is not instant. Keeping this delay is what forces you to build
 // a loading state now, while it is cheap, instead of discovering you need one
@@ -31,45 +31,59 @@ function read() {
   return seed
 }
 
-function write(rows) {
-  localStorage.setItem(KEY, JSON.stringify(rows))
-  return rows
+function write(data) {
+  localStorage.setItem(KEY, JSON.stringify(data))
+  return data
 }
 
-export async function listSightings() {
+export async function listCafes() {
   await delay()
-  return read().slice().sort((a, b) => b.reported_at.localeCompare(a.reported_at))
+
+  return read().cafes
 }
 
-export async function getSighting(id) {
+export async function getCafe(id) {
   await delay()
-  const found = read().find((row) => String(row.id) === String(id))
-  if (!found) throw new Error('Not found')
-  return found
-}
 
-export async function createSighting(input) {
-  await delay()
-  const created = {
-    ...input,
-    id: crypto.randomUUID(),
-    reported_at: new Date().toISOString(),
+  const cafe = read().cafes.find(
+    (cafe) => String(cafe.id) === String(id)
+  )
+
+  if (!cafe) {
+    throw new Error('Cafe not found')
   }
-  write([...read(), created])
-  return created
+
+  return cafe
 }
 
-export async function updateSighting(id, input) {
+export async function listDrinks() {
   await delay()
-  const rows = read()
-  const index = rows.findIndex((row) => String(row.id) === String(id))
-  if (index === -1) throw new Error('Not found')
-  rows[index] = { ...rows[index], ...input }
-  write(rows)
-  return rows[index]
+
+  return read()
+    .drinks
+    .slice()
+    .sort((a, b) => b.date.localeCompare(a.date))
 }
 
-export async function deleteSighting(id) {
+export async function listDrinksByCafe(cafeId) {
   await delay()
-  write(read().filter((row) => String(row.id) !== String(id)))
+
+  return read()
+    .drinks
+    .filter((drink) => String(drink.cafeId) === String(cafeId))
+    .sort((a, b) => b.date.localeCompare(a.date))
+}
+
+export async function getDrink(id) {
+  await delay()
+
+  const drink = read().drinks.find(
+    (drink) => String(drink.id) === String(id)
+  )
+
+  if (!drink) {
+    throw new Error('Drink not found')
+  }
+
+  return drink
 }

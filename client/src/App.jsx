@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
-import { listSightings, createSighting, deleteSighting } from './api'
+import { useEffect, useMemo, useState } from 'react'
+import { listCafes, listDrinks } from './api'
 import DemoNotice from './components/DemoNotice.jsx'
+import siporiMark from './assets/sipori-mark.png'
+import siporiWordmark from './assets/sipori-wordmark.png'
 
 // A deliberately small working app. Replace all of it with your own project.
 //
@@ -8,26 +10,29 @@ import DemoNotice from './components/DemoNotice.jsx'
 // message that admits a free-tier server can be slow to wake, and errors that
 // say something rather than rendering an empty list.
 
-const EMPTY_FORM = { place: '', description: '', spookiness: 3 }
-
 export default function App() {
-  const [status, setStatus] = useState('loading')   // loading | ready | error
-  const [rows, setRows] = useState([])
+  const [status, setStatus] = useState('loading')
+  const [cafes, setCafes] = useState([])
+  const [drinks, setDrinks] = useState([])
   const [error, setError] = useState(null)
   const [slow, setSlow] = useState(false)
-  const [form, setForm] = useState(EMPTY_FORM)
-  const [saving, setSaving] = useState(false)
+  const [search, setSearch] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
 
   async function load() {
     setStatus('loading')
     setError(null)
 
-    // A free-tier API sleeps. If this is taking a while, say so rather than
-    // spinning silently, which looks broken. See page 6.
     const timer = setTimeout(() => setSlow(true), 3000)
 
     try {
-      setRows(await listSightings())
+      const [cafeData, drinkData] = await Promise.all([
+        listCafes(),
+        listDrinks(),
+      ])
+
+      setCafes(cafeData)
+      setDrinks(drinkData)
       setStatus('ready')
     } catch (caught) {
       setError(caught)
@@ -42,128 +47,151 @@ export default function App() {
     load()
   }, [])
 
-  async function handleSubmit(event) {
-    event.preventDefault()
-    if (!form.place.trim()) return
+  const filteredCafes = useMemo(() => {
+    const query = search.trim().toLowerCase()
 
-    setSaving(true)
-    try {
-      const created = await createSighting({
-        place: form.place.trim(),
-        description: form.description.trim(),
-        spookiness: Number(form.spookiness),
-      })
-      setRows([created, ...rows])
-      setForm(EMPTY_FORM)
-    } catch (caught) {
-      setError(caught)
-    } finally {
-      setSaving(false)
+    if (!query) {
+      return cafes
     }
+
+    return cafes.filter((cafe) =>
+      cafe.name.toLowerCase().includes(query)
+    )
+  }, [cafes, search])
+
+  function getCafeDrinks(cafeId) {
+    return drinks.filter((drink) => drink.cafeId === cafeId)
   }
 
-  async function handleDelete(id) {
-    const previous = rows
-    setRows(rows.filter((row) => row.id !== id))   // optimistic
-    try {
-      await deleteSighting(id)
-    } catch (caught) {
-      setRows(previous)                            // put it back on failure
-      setError(caught)
+  function getAverageRating(cafeId) {
+    const cafeDrinks = getCafeDrinks(cafeId)
+
+    if (cafeDrinks.length === 0) {
+      return null
     }
+
+    const total = cafeDrinks.reduce(
+      (sum, drink) => sum + drink.rating,
+      0
+    )
+
+    return (total / cafeDrinks.length).toFixed(1)
   }
 
   return (
-    <div className="page">
-      <header>
-        <h1>HAUnted Sightings</h1>
-        <p className="lede">
-          Replace this with your own project. This one is here so the template
-          has something that works.
-        </p>
+    <div className="app">
+      <header className="site-header">
+        <a className="logo" href="/">
+          <img src={siporiMark} alt="Sipori home" />
+        </a>
+
+        <button
+          className="menu-toggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded={menuOpen}
+          aria-controls="main-navigation"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span /><span /><span />
+        </button>
+        <nav id="main-navigation" className={`nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
+          <a className="nav-link active" href="/">
+            Cafés
+          </a>
+          <a className="nav-link" href="#scrapbook">
+            Scrapbook
+          </a>
+        </nav>
       </header>
 
       <DemoNotice />
 
-      {error && (
-        <p className="error" role="alert">
-          {error.message} <button onClick={load}>Try again</button>
-        </p>
-      )}
+      <main className="main-content">
+        <section className="page-heading">
+          <h1>Cafés</h1>
 
-      <form onSubmit={handleSubmit} className="card">
-        <h2>Report a sighting</h2>
+          <label className="search">
+            <span className="sr-only">Search cafés</span>
+            <input
+              type="search"
+              placeholder="Search cafés..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </label>
+        </section>
 
-        <label htmlFor="place">Place</label>
-        <input
-          id="place"
-          value={form.place}
-          onChange={(event) => setForm({ ...form, place: event.target.value })}
-          maxLength={120}
-          required
-        />
+        {error && (
+          <div className="error" role="alert">
+            <p>We couldn't load your cafés. {error.message}</p>
+            <button type="button" onClick={load}>
+              Try again
+            </button>
+          </div>
+        )}
 
-        <label htmlFor="description">What happened</label>
-        <textarea
-          id="description"
-          value={form.description}
-          onChange={(event) => setForm({ ...form, description: event.target.value })}
-          maxLength={2000}
-          rows={3}
-        />
+        {status === 'loading' && (
+          <p className="status-message">
+            {slow
+              ? 'Still loading. The server may be waking up...'
+              : 'Loading cafés...'}
+          </p>
+        )}
 
-        <label htmlFor="spookiness">Spookiness, 1 to 5</label>
-        <input
-          id="spookiness"
-          type="number"
-          min="1"
-          max="5"
-          value={form.spookiness}
-          onChange={(event) => setForm({ ...form, spookiness: event.target.value })}
-          required
-        />
+        {status === 'ready' && cafes.length === 0 && (
+          <p className="status-message">
+            No cafés logged yet. Add your first café.
+          </p>
+        )}
 
-        <button type="submit" disabled={saving}>
-          {saving ? 'Saving...' : 'Add sighting'}
+        {status === 'ready' && cafes.length > 0 && (
+          <>
+            <div className="cafe-grid">
+              {filteredCafes.map((cafe) => {
+                const cafeDrinks = getCafeDrinks(cafe.id)
+                const averageRating = getAverageRating(cafe.id)
+
+                return (
+                  <article className="cafe-card" key={cafe.id}>
+                    <div className="cafe-card-image">
+                      <h2>{cafe.name}</h2>
+                    </div>
+
+                    <div className="cafe-card-content">
+                      <p>
+                        {cafeDrinks.length}{' '}
+                        {cafeDrinks.length === 1 ? 'drink' : 'drinks'} logged
+                      </p>
+
+                      <p className="rating">
+                        {averageRating
+                          ? `★ ${averageRating}`
+                          : 'No ratings yet'}
+                      </p>
+                    </div>
+                  </article>
+                )
+              })}
+
+            </div>
+
+            {filteredCafes.length === 0 && (
+              <p className="status-message">
+                No cafés match "{search}".
+              </p>
+            )}
+          </>
+        )}
+        <button className="add-cafe-card" type="button">
+          <span className="add-icon" aria-hidden="true">+</span>
+          <span>Add shop</span>
         </button>
-      </form>
+      </main>
 
-      {/* Four states. Empty and error are different things and must not look
-          the same: an empty list means "nothing here yet", an error means
-          "we could not find out". */}
-      {status === 'loading' && (
-        <p className="muted">
-          Loading{slow ? '. The server may be waking up, which can take up to a minute.' : '...'}
-        </p>
-      )}
-
-      {status === 'ready' && rows.length === 0 && (
-        <p className="muted">No sightings reported yet. Add the first one above.</p>
-      )}
-
-      {status === 'ready' && rows.length > 0 && (
-        <ul className="list">
-          {rows.map((row) => (
-            <li key={row.id} className="card">
-              <div className="row-head">
-                <h3>{row.place}</h3>
-                <span className="spooky" aria-label={`Spookiness ${row.spookiness} of 5`}>
-                  {'*'.repeat(row.spookiness)}
-                </span>
-              </div>
-              {row.description
-                ? <p>{row.description}</p>
-                : <p className="muted">No description given.</p>}
-              <footer>
-                <time dateTime={row.reported_at}>
-                  {new Date(row.reported_at).toLocaleString()}
-                </time>
-                <button onClick={() => handleDelete(row.id)}>Delete</button>
-              </footer>
-            </li>
-          ))}
-        </ul>
-      )}
+      <footer className="site-footer">
+        <span><img src={siporiWordmark} alt="Sipori" /></span>
+      </footer>
     </div>
   )
 }
