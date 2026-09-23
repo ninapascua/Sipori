@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { pool } from './db/pool.js'
 import * as sightings from './sightingsRepo.js'
+import { registerCafeRoutes } from './cafeRoutes.js'
 
 const app = express()
 
@@ -106,6 +107,8 @@ app.delete('/api/sightings/:id', async (request, response, next) => {
     next(error)
   }
 })
+
+registerCafeRoutes(app, pool)
 
 app.use((request, response) => {
   response.status(404).json({ error: 'No such route' })
