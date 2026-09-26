@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import outerStar from '../assets/outer1.png'
 
-export default function AddShopButton() {
+export default function AddShopButton({ onClick }) {
   const pixels = useRef(null)
   const [overStar, setOverStar] = useState(false)
 
@@ -46,6 +46,7 @@ export default function AddShopButton() {
     <button
       className={`add-cafe-card${overStar ? ' is-over-star' : ''}`}
       type="button"
+      onClick={onClick}
       onPointerEnter={checkStar}
       onPointerMove={checkStar}
       onPointerLeave={() => setOverStar(false)}

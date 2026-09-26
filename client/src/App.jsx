@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { listCafes, listDrinks } from './api'
 import DemoNotice from './components/DemoNotice.jsx'
 import AddShopButton from './components/AddShopButton.jsx'
+import AddCafeModal from './components/AddCafeModal.jsx'
 import siporiMark from './assets/sipori-mark.png'
 import siporiWordmark from './assets/sipori-wordmark.png'
 
@@ -19,6 +20,7 @@ export default function App() {
   const [slow, setSlow] = useState(false)
   const [search, setSearch] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [addingCafe, setAddingCafe] = useState(false)
 
   async function load() {
     setStatus('loading')
@@ -185,9 +187,10 @@ export default function App() {
             )}
           </>
         )}
-        <AddShopButton />
+        <AddShopButton onClick={() => setAddingCafe(true)} />
       </main>
 
+      {addingCafe && <AddCafeModal onClose={() => setAddingCafe(false)} />}
       <footer className="site-footer">
         <span><img src={siporiWordmark} alt="Sipori" /></span>
       </footer>

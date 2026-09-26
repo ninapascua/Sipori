@@ -730,3 +730,261 @@ button:disabled { opacity: .6; cursor: default; }
   outline: none;
   box-shadow: 0 2px 8px #350b0c40;
 }
+
+/* Full-canvas star modal from the Add Caf? reference. */
+.add-cafe-modal {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg);
+  overflow: auto;
+}
+.add-cafe-modal::backdrop { background: #0009; }
+.add-cafe-scene {
+  position: relative;
+  isolation: isolate;
+  min-height: max(100dvh, 540px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.modal-star {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  z-index: -1;
+}
+.modal-star-outer { width: max(100%, 960px); }
+.modal-star-inner { width: max(90.5%, 869px); }
+.add-cafe-form {
+  width: clamp(260px, 31.5vw, 460px);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: clamp(.85rem, 1.2vw, 1.1rem);
+}
+.add-cafe-form h2 {
+  margin: 0 0 clamp(38px, 9vh, 90px);
+  font-family: 'Luxurious Script', 'Brush Script MT', cursive;
+  font-size: clamp(3rem, 4.5vw, 4.7rem);
+  font-weight: 400;
+  line-height: 1.1;
+}
+.add-cafe-form .cafe-name-input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid var(--accent);
+  border-radius: 0;
+  padding: 5px 8px;
+  text-align: center;
+  font-size: 16px;
+}
+.cafe-name-input:focus { outline: none; box-shadow: 0 3px 3px -2px #20381480; }
+.add-cafe-form label { color: var(--fg); font-size: inherit; margin-top: 10px; }
+.add-cafe-form .add-image-button {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 5px 13px;
+  border: 1px solid #350b0c80;
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: inherit;
+  font-weight: 700;
+}
+.add-image-button > span { font-size: 1.35rem; line-height: 1; }
+.add-image-button img { width: 32px; height: 28px; object-fit: cover; border-radius: 3px; }
+.cafe-form-actions { display: flex; justify-content: flex-end; gap: 22px; width: 100%; padding-right: 11%; margin-top: clamp(30px, 8vh, 65px); }
+.cafe-form-actions button { margin: 0; padding: 0 14px; border-radius: 999px; font-size: inherit; font-weight: 700; line-height: 1.4; }
+.cafe-form-actions .cafe-cancel { background: var(--bg); color: var(--fg); border: 1px solid #350b0c80; }
+.cafe-form-actions .cafe-next { background: var(--accent); color: var(--pink); }
+.cafe-form-error { color: var(--fg); font-size: .85rem; margin: 12px 0 0; }
+@media (max-width: 599px) {
+  .add-cafe-form { width: min(68vw, 320px); }
+  .cafe-form-actions button { min-height: 36px; }
+  .cafe-form-actions { padding-right: 0; justify-content: center; }
+}
+
+/* Responsive canvas: the star reaches the viewport edge, not a capped wrapper. */
+.app {
+  --page-gutter: clamp(20px, 5.3vw, 120px);
+  max-width: none;
+  width: 100%;
+  min-height: 100svh;
+  padding-inline: var(--page-gutter);
+}
+.site-footer { flex-shrink: 0; transform: none; }
+@media (min-width: 600px) {
+  .main-content {
+    --star-height: min(42vw, 74svh);
+    position: relative;
+    grid-template-columns: minmax(0, 52vw) minmax(0, 1fr);
+    padding-left: 5.3vw;
+    padding-bottom: clamp(24px, 4vw, 60px);
+    min-height: calc(var(--star-height) + 40px);
+    column-gap: 3vw;
+    row-gap: clamp(25px, 4.2vw, 80px);
+  }
+  .page-heading { width: 100%; }
+  .page-heading h1 { font-size: clamp(2rem, 5.3vw, 6rem); }
+  .search { flex: 1 1 0; }
+  .search input { height: clamp(24px, 2.8vw, 48px); }
+  .add-cafe-card {
+    grid-area: auto;
+    top: 16px;
+    right: calc(-1 * var(--page-gutter));
+    width: calc(var(--star-height) * .63217);
+    height: var(--star-height);
+    min-height: 0;
+    margin: 0;
+  }
+  .cafe-scroll {
+    --shop-row-height: clamp(90px, 11.5vw, 245px);
+    --shop-row-gap: clamp(24px, 4.5vw, 90px);
+    --scroll-space: clamp(16px, 2vw, 40px);
+  }
+  .cafe-scroll .cafe-grid {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(20px, 7vw, 145px);
+    row-gap: var(--shop-row-gap);
+  }
+  .cafe-card { width: 100%; padding: clamp(4px, .66vw, 13px); }
+  .cafe-card-image h2 { font-size: clamp(.85rem, 2.4vw, 2.8rem); }
+  .cafe-card-content { font-size: clamp(.5rem, 1.04vw, 1.1rem); }
+}
+/* Tablets retain the three-column arrangement with readable card content. */
+@media (min-width: 600px) and (max-width: 1000px) {
+  .main-content { padding-left: 2vw; grid-template-columns: minmax(0, 60vw) minmax(0, 1fr); }
+  .cafe-scroll .cafe-grid { column-gap: 3vw; }
+  .cafe-scroll { --shop-row-height: clamp(110px, 17vw, 150px); --shop-row-gap: 24px; }
+  .cafe-card-image h2 { font-size: clamp(1rem, 2.4vw, 1.5rem); }
+  .cafe-card-content { font-size: clamp(.65rem, 1.25vw, .8rem); }
+  .add-cafe-card { --star-height: 34vw; }
+}
+@media (max-width: 599px) {
+  .app { padding: 17px 18px 10px; }
+  .main-content {
+    display: grid;
+    position: relative;
+    grid-template-columns: minmax(0, 1fr) 80px;
+    gap: 24px 14px;
+    padding: 24px 0 32px;
+    min-height: 0;
+  }
+  .page-heading { display: contents; }
+  .search { grid-column: 1; grid-row: 1; width: 100%; margin: 0; }
+  .search input { height: 36px; min-height: 36px; font-size: 16px; padding: 4px 32px 4px 12px; }
+  .search::before { width: 9px; height: 9px; right: 15px; top: 11px; }
+  .search::after { width: 6px; right: 10px; top: 22px; }
+  .page-heading h1 { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: 2.8rem; }
+  .add-cafe-card {
+    position: relative;
+    grid-column: 2;
+    grid-row: 1;
+    top: auto;
+    right: auto;
+    width: 80px;
+    height: 100px;
+    min-height: 0;
+    margin: 0;
+    font-size: .65rem;
+  }
+  .add-cafe-card::before { inset: 0; }
+  .add-cafe-card::after { inset: 13% 0 13% 20%; }
+  .add-cafe-card > span { position: relative; left: 12%; }
+  .cafe-scroll {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0;
+    max-height: min(65svh, 570px);
+    padding: 2px 12px 6px 2px;
+    scrollbar-gutter: stable;
+  }
+  .cafe-scroll .cafe-grid {
+    width: 100%;
+    margin: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    gap: 18px 16px;
+  }
+  .cafe-card { width: 100%; padding: 6px; }
+  .cafe-card-image h2 { font-size: clamp(1rem, 4.5vw, 1.5rem); }
+  .cafe-card-content { font-size: clamp(.65rem, 2.7vw, .9rem); }
+  .cafe-card-content p { white-space: normal; }
+  .site-footer > span, .site-footer img { width: 52px; }
+}
+
+/* Let the card panel absorb height changes instead of scrolling the page. */
+html, body, #root { height: 100%; }
+body { overflow: hidden; }
+.app { height: 100dvh; min-height: 0; overflow: hidden; }
+.site-header, .site-footer { flex-shrink: 0; }
+.main-content {
+  flex: 1 1 0;
+  min-height: 0;
+  grid-template-rows: auto minmax(0, 1fr);
+  row-gap: clamp(16px, 4vh, 48px);
+  padding-top: clamp(16px, 3vh, 36px);
+  padding-bottom: clamp(16px, 3vh, 36px);
+}
+.cafe-scroll { height: 100%; max-height: 100%; align-self: stretch; }
+@media (min-width: 600px) {
+  .cafe-scroll { grid-row: 2; }
+  .add-cafe-card {
+    height: calc(100% - 32px);
+    max-height: var(--star-height);
+    width: auto;
+    aspect-ratio: 507 / 802;
+  }
+}
+@media (max-width: 599px) {
+  .main-content {
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: clamp(10px, 2vh, 20px) 14px;
+    padding-block: 12px;
+  }
+  .cafe-scroll { grid-row: 3; max-height: 100%; }
+  .add-cafe-card { height: clamp(64px, 12dvh, 100px); }
+  .page-heading h1 { font-size: clamp(2rem, 6dvh, 2.8rem); }
+}
+
+/* Fade the page behind a gently expanding star, then reverse on dismissal. */
+.add-cafe-modal[open] { animation: cafe-modal-in 300ms ease-out both; }
+.add-cafe-modal[open]::backdrop { animation: cafe-backdrop-in 300ms ease-out both; }
+.add-cafe-modal[open] .add-cafe-scene {
+  transform-origin: 65% 50%;
+  animation: cafe-star-in 340ms cubic-bezier(.2, .7, .2, 1) both;
+}
+.add-cafe-modal.is-closing { animation: cafe-modal-out 220ms ease-in both; }
+.add-cafe-modal.is-closing::backdrop { animation: cafe-backdrop-out 220ms ease-in both; }
+.add-cafe-modal.is-closing .add-cafe-scene { animation: cafe-star-out 220ms ease-in both; pointer-events: none; }
+@keyframes cafe-modal-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cafe-modal-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes cafe-backdrop-in { from { background: #0000; } to { background: #0009; } }
+@keyframes cafe-backdrop-out { from { background: #0009; } to { background: #0000; } }
+@keyframes cafe-star-in { from { transform: scale(.94); } to { transform: scale(1); } }
+@keyframes cafe-star-out { from { transform: scale(1); } to { transform: scale(.96); } }
+@media (prefers-reduced-motion: reduce) {
+  .add-cafe-modal[open],
+  .add-cafe-modal[open]::backdrop,
+  .add-cafe-modal[open] .add-cafe-scene { animation: none; }
+}
