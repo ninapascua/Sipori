@@ -21,7 +21,15 @@ function read() {
   const stored = localStorage.getItem(KEY)
   if (stored) {
     try {
-      return JSON.parse(stored)
+      const data = JSON.parse(stored)
+      // Add new demo shops to existing browsers without replacing saved entries.
+      const existingIds = new Set(data.cafes.map((cafe) => cafe.id))
+      const addedCafes = seed.cafes.filter((cafe) => !existingIds.has(cafe.id))
+      if (addedCafes.length > 0) {
+        data.cafes.push(...addedCafes)
+        write(data)
+      }
+      return data
     } catch {
       // Corrupted storage. Start again rather than crashing the app.
       localStorage.removeItem(KEY)

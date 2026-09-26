@@ -118,6 +118,7 @@ button:disabled { opacity: .6; cursor: default; }
   max-width: 1456px;
   min-height: 100vh;
   margin: 0 auto;
+  overflow-x: hidden;
   padding: 30px clamp(20px, 5vw, 75px) 20px;
   display: flex;
   flex-direction: column;
@@ -273,7 +274,7 @@ button:disabled { opacity: .6; cursor: default; }
 
 /* The phone wireframe moves Add shop beside search and uses two card columns.
    Navigation stays keyboard-accessible through the expandable menu. */
-@media (max-width: 760px) {
+@media (max-width: 599px) {
   .app { padding: 22px 20px 18px; }
   .site-header { position: relative; justify-content: space-between; }
   .logo { min-width: 120px; min-height: 50px; }
@@ -319,7 +320,7 @@ button:disabled { opacity: .6; cursor: default; }
 .logo img { display: block; width: 84px; height: 84px; object-fit: contain; }
 .site-footer > span { width: 88px; }
 .site-footer img { display: block; width: 88px; height: auto; }
-.nav { border-bottom: 1px solid var(--card); font-size: 1.1rem; }
+.nav { border-bottom: 1px solid #350B0C; font-size: 1.1rem; }
 .nav-link { text-transform: lowercase; border-bottom-width: 2px; }
 .nav-link.active { font-weight: 400; }
 .nav-link:hover { background: var(--pink); }
@@ -371,22 +372,20 @@ button:disabled { opacity: .6; cursor: default; }
   font-size: 1.1rem;
   text-transform: lowercase;
 }
-/* Clip only the decorative layer so the button keeps a visible focus outline. */
+/* Uploaded star artwork stays decorative so the button retains its focus outline. */
 .add-cafe-card::before {
   content: '';
   position: absolute;
   inset: 0 -24px;
   z-index: -1;
-  background: var(--card);
-  clip-path: polygon(50% 0, 57% 32%, 81% 9%, 68% 38%, 100% 25%, 73% 50%, 100% 75%, 68% 62%, 81% 91%, 57% 68%, 50% 100%, 43% 68%, 19% 91%, 32% 62%, 0 75%, 27% 50%, 0 25%, 32% 38%, 19% 9%, 43% 32%);
-  transition: background-color 150ms ease;
+  background: url('./assets/outer1.png') center / contain no-repeat;
+  pointer-events: none;
 }
 .add-cafe-card:hover { background: transparent; }
-.add-cafe-card:hover::before { background: var(--pink); }
 .add-icon { font-size: 3.6rem; line-height: 1; }
-.site-footer { border-top: 1px solid var(--card); }
+.site-footer { border-top: 1px solid #350B0C; }
 
-@media (max-width: 760px) {
+@media (max-width: 599px) {
   .logo, .logo img { width: 65px; min-width: 65px; height: 65px; min-height: 65px; }
   .nav.is-open { background: var(--bg); border-color: var(--card); }
   .page-heading h1 { font-size: 3.4rem; padding: 0; }
@@ -398,6 +397,336 @@ button:disabled { opacity: .6; cursor: default; }
   .add-icon { font-size: 1.9rem; }
 }
 
+@media (max-width: 480px) {
+  .app { padding-inline: 14px; }
+  .demo-notice { margin-top: 18px; padding: 12px 13px; font-size: .74rem; }
+  .main-content { grid-template-columns: minmax(0, 1fr) 76px; gap: 24px 12px; padding-inline: 0; }
+  .page-heading h1 { font-size: 3rem; }
+  .cafe-grid { gap: 24px 12px; }
+  .cafe-card { padding: 7px; }
+  .cafe-card-content { font-size: .72rem; }
+  .add-cafe-card { min-height: 76px; }
+  .add-cafe-card::before { inset: -4px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .add-cafe-card::before { transition: none; }
+}
+
+/* Final reference composition. The cards remain driven by the API data; these
+   measurements only control the visual density of the supplied artwork. */
+.demo-notice { display: none; }
+.logo .logo-mark { display: block; }
+.logo .logo-wordmark { display: none; }
+.app { padding: 21px clamp(20px, 6.4vw, 75px) 8px; }
+.site-header { min-height: 29px; }
+.logo, .logo img { width: 38px; height: 31px; min-width: 38px; min-height: 31px; }
+.nav { font-size: .48rem; gap: 38px; padding-right: 0; }
+.nav-link { padding: 3px 6px 5px; }
+.main-content {
+  grid-template-columns: minmax(0, 1fr) 160px;
+  column-gap: 28px;
+  row-gap: 23px;
+  padding: 20px 0 18px 5.4vw;
+}
+.page-heading { gap: 13px; }
+.page-heading h1 { font-size: 2rem; }
+.search { flex: 0 1 260px; }
+.search input { min-height: 17px; height: 17px; border-width: 1px; padding: 1px 24px 1px 9px; font-size: .55rem; }
+.search::before { right: 12px; top: 5px; width: 6px; height: 6px; border-width: 1px; }
+.search::after { right: 8px; top: 12px; width: 5px; height: 1px; }
+.cafe-grid { grid-template-columns: repeat(3, 74px); gap: 40px 46px; justify-content: start; }
+.cafe-card { width: 74px; padding: 4px; border-radius: 6px; }
+.cafe-card-image { aspect-ratio: 1.65; border-radius: 5px; padding: 3px; }
+.cafe-card-image h2 { font-size: .73rem; }
+.cafe-card-content { padding-top: 3px; font-size: .39rem; line-height: 1.35; }
+.cafe-card-content p { margin: 2px 0; white-space: nowrap; }
+.rating { letter-spacing: 0; }
+.add-cafe-card {
+  min-height: 200px;
+  margin-top: 0;
+  font-size: .55rem;
+}
+.add-icon { font-size: 1.8rem; }
+.add-cafe-card::before { inset: 0 -2px; transition: none; }
+.add-cafe-card::after {
+  content: '';
+  position: absolute;
+  inset: 15px 13px;
+  z-index: -1;
+  background: url('./assets/inner1.png') center / contain no-repeat;
+  pointer-events: none;
+  opacity: 0;
+}
+.add-cafe-card.is-over-star::after,
+.add-cafe-card:focus-visible::after { opacity: 1; }
+.site-footer { padding-top: 6px; }
+.site-footer > span, .site-footer img { width: 30px; height: auto; min-width: 30px; min-height: 0; }
+
+@media (min-width: 600px) and (max-width: 700px) {
+  .page-heading { width: 314px; gap: 7px; }
+  .search { flex: 0 0 260px; }
+  .add-cafe-card { margin-left: 39px; }
+  .add-cafe-card::before { inset: 0; }
+  .site-footer { transform: translateY(-31px); }
+}
+
+@media (max-width: 599px) {
+  .app { padding: 17px 18px 6px; }
+  .site-header { min-height: 42px; }
+  .logo, .logo img { width: 82px; height: 34px; min-width: 82px; min-height: 34px; }
+  .logo .logo-mark { display: none; }
+  .logo .logo-wordmark { display: block; object-fit: contain; }
+  .menu-toggle { padding: 5px 0; gap: 4px; }
+  .menu-toggle span { width: 17px; height: 1px; }
+  .main-content {
+    grid-template-columns: minmax(0, 1fr) 90px;
+    column-gap: 12px;
+    row-gap: 24px;
+    padding: 27px 6px 18px;
+  }
+  .page-heading h1 { font-size: 1.55rem; }
+  .search input { height: 17px; font-size: .58rem; }
+  .cafe-grid { grid-template-columns: repeat(2, 91px); gap: 18px 17px; justify-content: start; }
+  .cafe-card { width: 91px; padding: 5px; border-radius: 6px; }
+  .cafe-card-image h2 { font-size: .78rem; }
+  .cafe-card-content { font-size: .42rem; }
+  .add-cafe-card { min-height: 90px; font-size: .43rem; }
+  .add-icon { font-size: 1.25rem; }
+  .add-cafe-card::before { inset: -2px; }
+  .add-cafe-card::after { inset: 8px 7px; }
+  .site-footer { padding-top: 5px; }
+}
+
+@media (max-width: 320px) {
+  .main-content {
+    display: block;
+    position: relative;
+    padding: 32px 6px 18px;
+  }
+  .page-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 35px;
+  }
+  .search { order: 1; width: 159px; flex: 0 0 auto; margin-left: -15px; }
+  .page-heading h1 { order: 2; margin-left: 5px; font-size: 1.2rem; }
+  .cafe-grid {
+    width: 199px;
+    margin-top: 10px;
+    margin-left: 6px;
+    grid-template-columns: repeat(2, 91px);
+    gap: 18px 17px;
+  }
+  .add-cafe-card {
+    position: absolute;
+    top: 7px;
+    right: -30px;
+    width: 64px;
+    min-height: 82px;
+  }
+  .add-cafe-card::before { inset: -3px; }
+  .add-cafe-card::after { inset: 8px 7px; }
+}
+
+/* The reference places the cropped star flush against the desktop canvas edge. */
+@media (min-width: 600px) {
+  .main-content { position: relative; }
+  .add-cafe-card {
+    position: absolute;
+    top: 16px;
+    right: calc(-1 * clamp(20px, 6.4vw, 75px));
+    width: clamp(160px, 26.5vw, 386px);
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 507 / 802;
+    margin: 0;
+    padding: 0;
+    display: block;
+    font-size: clamp(.55rem, 1.45vw, 1.1rem);
+    font-weight: 400;
+  }
+  .add-cafe-card::before { inset: 0; }
+  .add-cafe-card::after {
+    inset: 13% 0 13% 20%;
+  }
+  .add-cafe-card > span {
+    position: absolute;
+    left: 75%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .add-cafe-card .add-icon {
+    top: 44%;
+    font-size: clamp(1.8rem, 4.7vw, 4.2rem);
+    line-height: 1;
+  }
+  .add-cafe-card > span:last-child { top: 54%; }
+}
+
+/* Scale the reference's three-card composition with the desktop canvas. */
+@media (min-width: 600px) {
+  .main-content {
+    grid-template-columns: minmax(0, clamp(314px, 52vw, 758px)) minmax(0, 1fr);
+    column-gap: clamp(28px, 4.6vw, 67px);
+    row-gap: clamp(25px, 4.2vw, 61px);
+    padding-left: clamp(25px, 4.2vw, 61px);
+    padding-top: clamp(20px, 3.3vw, 48px);
+  }
+  .page-heading { width: 100%; gap: clamp(13px, 2.2vw, 32px); }
+  .page-heading h1 {
+    flex: 0 0 auto;
+    padding: 0;
+    font-size: clamp(2rem, 5.3vw, 4.8rem);
+  }
+  .search { flex: 1 1 auto; }
+  .search input {
+    height: clamp(17px, 2.8vw, 41px);
+    min-height: 0;
+    padding: 0 clamp(26px, 4.3vw, 63px) 0 clamp(10px, 1.7vw, 25px);
+    border: 1px solid var(--fg);
+    border-radius: 999px;
+    font-size: clamp(.65rem, 1.7vw, 1.2rem);
+  }
+  .search::before {
+    width: clamp(6px, 1vw, 14px);
+    height: clamp(6px, 1vw, 14px);
+    top: 50%;
+    right: clamp(12px, 2vw, 29px);
+    transform: translateY(-65%);
+  }
+  .search::after {
+    width: clamp(5px, .8vw, 12px);
+    top: 58%;
+    right: clamp(8px, 1.3vw, 19px);
+  }
+  .cafe-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(45px, 7.5vw, 109px);
+    row-gap: clamp(41px, 6.8vw, 99px);
+  }
+  .cafe-card {
+    width: 100%;
+    min-height: clamp(69px, 11.5vw, 167px);
+    padding: clamp(4px, .66vw, 10px);
+    border-radius: clamp(5px, .8vw, 12px);
+    box-shadow: 0 2px 2px #350b0c40;
+  }
+  .cafe-card-image { aspect-ratio: 1.8; border-radius: clamp(3px, .5vw, 7px); }
+  .cafe-card-image h2 {
+    font-size: clamp(.9rem, 2.4vw, 2.15rem);
+    line-height: .95;
+    max-width: 100%;
+  }
+  .cafe-card-content {
+    padding-top: clamp(3px, .5vw, 7px);
+    font-size: clamp(.39rem, 1.04vw, .95rem);
+    line-height: 1.35;
+  }
+  .cafe-card-content p { margin: clamp(2px, .33vw, 5px) 0; white-space: normal; }
+}
+
+/* Keep navigation in proportion to the reference artwork and desktop cards. */
+@media (min-width: 600px) {
+  .app { padding-top: clamp(12px, 2vw, 29px); }
+  .site-header { gap: 0; min-height: clamp(31px, 5.1vw, 74px); }
+  .logo, .logo img {
+    width: clamp(34px, 5.6vw, 82px);
+    min-width: clamp(34px, 5.6vw, 82px);
+    height: clamp(31px, 5.1vw, 74px);
+    min-height: clamp(31px, 5.1vw, 74px);
+  }
+  .nav {
+    align-self: center;
+    transform: translateY(clamp(-12px, -0.85vw, -5px));
+    align-items: center;
+    gap: clamp(26px, 4.3vw, 63px);
+    padding: 0 clamp(12px, 2vw, 29px) 0 0;
+    font-size: clamp(.55rem, 1.45vw, 1.25rem);
+    line-height: 1.4;
+    border-bottom: 1px solid #350B0C;
+  }
+  .nav-link {
+    padding: 0 clamp(9px, 1.5vw, 22px) clamp(5px, .8vw, 12px);
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  .nav-link.active { border-bottom-color: var(--fg); }
+  .nav-link:hover { background: transparent; border-bottom-color: var(--fg); }
+}
+@media (max-width: 599px) {
+  .menu-toggle { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  .nav.is-open {
+    z-index: 10;
+    min-width: 160px;
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid var(--card);
+    box-shadow: 0 3px 8px #350b0c18;
+  }
+  .nav.is-open .nav-link { min-height: 44px; padding: 10px 12px; margin: 0; }
+}
+
+/* The footer wordmark is about 30px wide on the 603px reference canvas. */
+.site-footer > span,
+.site-footer img {
+  width: clamp(30px, 5vw, 73px);
+  min-width: 0;
+  height: auto;
+  min-height: 0;
+}
+
+/* Transparent pixels do not advertise the star's hover state. */
+.add-cafe-card { cursor: default; }
+.add-cafe-card.is-over-star { cursor: pointer; }
+
+/* Keep additional shops inside a keyboard-scrollable panel beside Add shop. */
+.cafe-scroll {
+  grid-column: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--card) var(--bg);
+}
+.cafe-scroll::-webkit-scrollbar { width: 6px; }
+.cafe-scroll::-webkit-scrollbar-track { background: var(--bg); }
+.cafe-scroll::-webkit-scrollbar-thumb { background: var(--card); border-radius: 999px; }
+@media (min-width: 600px) {
+  .cafe-scroll {
+    --shop-row-height: clamp(69px, 11.5vw, 167px);
+    --shop-row-gap: clamp(41px, 6.8vw, 99px);
+    --scroll-space: clamp(18px, 3vw, 36px);
+    width: calc(100% + var(--scroll-space));
+    max-height: calc(var(--shop-row-height) + var(--shop-row-height) + var(--shop-row-gap) + 6px);
+    padding: 0 var(--scroll-space) 6px 0;
+    scrollbar-gutter: stable;
+  }
+  .cafe-scroll .cafe-grid {
+    grid-auto-rows: var(--shop-row-height);
+    column-gap: clamp(42px, 7vw, 102px);
+  }
+  .cafe-scroll .cafe-card { min-height: 0; }
+}
+@media (max-width: 599px) {
+  .cafe-scroll {
+    grid-column: 1 / -1;
+    max-height: 312px;
+    padding: 2px 12px 6px 2px;
+  }
+  .cafe-scroll .cafe-grid { grid-auto-rows: 90px; }
+}
+@media (max-width: 320px) {
+  .cafe-scroll { margin-top: 10px; }
+  .cafe-scroll .cafe-grid { margin-top: 0; }
+}
+
+/* A soft focus shadow keeps the search field's single border clear. */
+.search input:focus {
+  outline: none;
+  box-shadow: 0 2px 8px #350b0c40;
 }

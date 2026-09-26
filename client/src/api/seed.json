@@ -19,6 +19,22 @@
     {
       "id": "cafe-5",
       "name": "Tsuki Café"
+    },
+    {
+      "id": "cafe-6",
+      "name": "Yuni"
+    },
+    {
+      "id": "cafe-7",
+      "name": "Young Folks"
+    },
+    {
+      "id": "cafe-8",
+      "name": "Sora"
+    },
+    {
+      "id": "cafe-9",
+      "name": "Komorebi"
     }
   ],
   "drinks": [

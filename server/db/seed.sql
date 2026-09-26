@@ -35,7 +35,11 @@ INSERT INTO cafes (id, name) VALUES
   ('cafe-2', 'Mori Café'),
   ('cafe-3', 'Kissa House'),
   ('cafe-4', 'Midori'),
-  ('cafe-5', 'Tsuki Café')
+  ('cafe-5', 'Tsuki Café'),
+  ('cafe-6', 'Yuni'),
+  ('cafe-7', 'Young Folks'),
+  ('cafe-8', 'Sora'),
+  ('cafe-9', 'Komorebi')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO drinks (id, cafe_id, name, type, price, rating, reorder, notes, date, photo_url) VALUES

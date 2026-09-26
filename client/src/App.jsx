@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listCafes, listDrinks } from './api'
 import DemoNotice from './components/DemoNotice.jsx'
+import AddShopButton from './components/AddShopButton.jsx'
 import siporiMark from './assets/sipori-mark.png'
 import siporiWordmark from './assets/sipori-wordmark.png'
 
@@ -81,8 +82,9 @@ export default function App() {
   return (
     <div className="app">
       <header className="site-header">
-        <a className="logo" href="/">
-          <img src={siporiMark} alt="Sipori home" />
+        <a className="logo" href="/" aria-label="Sipori home">
+          <img className="logo-mark" src={siporiMark} alt="Sipori home" />
+          <img className="logo-wordmark" src={siporiWordmark} alt="" aria-hidden="true" />
         </a>
 
         <button
@@ -96,7 +98,7 @@ export default function App() {
           <span /><span /><span />
         </button>
         <nav id="main-navigation" className={`nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-          <a className="nav-link active" href="/">
+          <a className="nav-link active" href="/" aria-current="page">
             Cafés
           </a>
           <a className="nav-link" href="#scrapbook">
@@ -115,7 +117,6 @@ export default function App() {
             <span className="sr-only">Search cafés</span>
             <input
               type="search"
-              placeholder="Search cafés..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
             />
@@ -147,6 +148,7 @@ export default function App() {
 
         {status === 'ready' && cafes.length > 0 && (
           <>
+            <div className="cafe-scroll" role="region" aria-label="Caf?s" tabIndex={0}>
             <div className="cafe-grid">
               {filteredCafes.map((cafe) => {
                 const cafeDrinks = getCafeDrinks(cafe.id)
@@ -160,13 +162,12 @@ export default function App() {
 
                     <div className="cafe-card-content">
                       <p>
-                        {cafeDrinks.length}{' '}
-                        {cafeDrinks.length === 1 ? 'drink' : 'drinks'} logged
+                        drinks logged: {cafeDrinks.length}
                       </p>
 
                       <p className="rating">
                         {averageRating
-                          ? `★ ${averageRating}`
+                          ? `ave. rating: ${'★'.repeat(Math.round(Number(averageRating)))}`
                           : 'No ratings yet'}
                       </p>
                     </div>
@@ -174,6 +175,7 @@ export default function App() {
                 )
               })}
 
+            </div>
             </div>
 
             {filteredCafes.length === 0 && (
@@ -183,10 +185,7 @@ export default function App() {
             )}
           </>
         )}
-        <button className="add-cafe-card" type="button">
-          <span className="add-icon" aria-hidden="true">+</span>
-          <span>Add shop</span>
-        </button>
+        <AddShopButton />
       </main>
 
       <footer className="site-footer">
