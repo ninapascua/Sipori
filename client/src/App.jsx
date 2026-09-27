@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { listCafes, listDrinks } from './api'
+import { listCafes, listDrinks, createCafeWithDrink, createDrink } from './api'
+import CafePage from './components/CafePage.jsx'
 import DemoNotice from './components/DemoNotice.jsx'
 import AddShopButton from './components/AddShopButton.jsx'
 import AddCafeModal from './components/AddCafeModal.jsx'
 import siporiMark from './assets/sipori-mark.png'
+import cafeArt from './assets/cafe-art.png'
 import siporiWordmark from './assets/sipori-wordmark.png'
 
 // A deliberately small working app. Replace all of it with your own project.
@@ -21,6 +23,15 @@ export default function App() {
   const [search, setSearch] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   const [addingCafe, setAddingCafe] = useState(false)
+  const [route, setRoute] = useState(window.location.hash)
+  const [addingDrink, setAddingDrink] = useState(false)
+  useEffect(() => {
+    const updateRoute = () => { setRoute(window.location.hash); setAddingDrink(false); setMenuOpen(false) }
+    window.addEventListener('hashchange', updateRoute)
+    return () => window.removeEventListener('hashchange', updateRoute)
+  }, [])
+  const cafeRoute = route.startsWith('#/cafes/')
+  const selectedCafe = cafes.find((cafe) => `#/cafes/${encodeURIComponent(cafe.id)}` === route)
 
   async function load() {
     setStatus('loading')
@@ -67,7 +78,7 @@ export default function App() {
   }
 
   function getAverageRating(cafeId) {
-    const cafeDrinks = getCafeDrinks(cafeId)
+    const cafeDrinks = getCafeDrinks(cafeId).filter((drink) => Number.isFinite(drink.rating))
 
     if (cafeDrinks.length === 0) {
       return null
@@ -84,7 +95,7 @@ export default function App() {
   return (
     <div className="app">
       <header className="site-header">
-        <a className="logo" href="/" aria-label="Sipori home">
+        <a className="logo" href="#/" aria-label="Sipori home">
           <img className="logo-mark" src={siporiMark} alt="Sipori home" />
           <img className="logo-wordmark" src={siporiWordmark} alt="" aria-hidden="true" />
         </a>
@@ -100,7 +111,7 @@ export default function App() {
           <span /><span /><span />
         </button>
         <nav id="main-navigation" className={`nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-          <a className="nav-link active" href="/" aria-current="page">
+          <a className="nav-link active" href="#/" aria-current={cafeRoute ? undefined : 'page'}>
             Cafés
           </a>
           <a className="nav-link" href="#scrapbook">
@@ -111,7 +122,7 @@ export default function App() {
 
       <DemoNotice />
 
-      <main className="main-content">
+      {cafeRoute ? <CafePage key={route} cafe={selectedCafe} drinks={selectedCafe ? getCafeDrinks(selectedCafe.id) : []} status={status} error={error} onRetry={load} onAddDrink={() => setAddingDrink(true)} /> : <main className="main-content">
         <section className="page-heading">
           <h1>Cafés</h1>
 
@@ -158,7 +169,18 @@ export default function App() {
 
                 return (
                   <article className="cafe-card" key={cafe.id}>
+                    <a className="cafe-card-link" href={`#/cafes/${encodeURIComponent(cafe.id)}`} aria-label={`View ${cafe.name}`}>
                     <div className="cafe-card-image">
+                      <img
+                        className="cafe-card-photo"
+                        src={cafe.photoUrl || cafeArt}
+                        alt=""
+                        onError={(event) => {
+                          if (event.currentTarget.getAttribute('src') !== cafeArt) {
+                            event.currentTarget.src = cafeArt
+                          }
+                        }}
+                      />
                       <h2>{cafe.name}</h2>
                     </div>
 
@@ -173,6 +195,7 @@ export default function App() {
                           : 'No ratings yet'}
                       </p>
                     </div>
+                    </a>
                   </article>
                 )
               })}
@@ -188,9 +211,22 @@ export default function App() {
           </>
         )}
         <AddShopButton onClick={() => setAddingCafe(true)} />
-      </main>
+      </main>}
 
-      {addingCafe && <AddCafeModal onClose={() => setAddingCafe(false)} />}
+      {addingDrink && selectedCafe && <AddCafeModal cafe={selectedCafe} onClose={() => setAddingDrink(false)} onSave={async ({ drink }) => {
+        const saved = await createDrink(selectedCafe.id, drink)
+        setDrinks((current) => [saved, ...current])
+      }} />}
+
+      {addingCafe && <AddCafeModal onClose={() => setAddingCafe(false)} onSave={async (draft) => {
+        const result = await createCafeWithDrink(draft)
+        setCafes((current) => [result.cafe, ...current])
+        setDrinks((current) => [result.drink, ...current])
+        setSearch('')
+        setStatus('ready')
+        setError(null)
+        document.querySelector('.cafe-scroll')?.scrollTo({ top: 0 })
+      }} />}
       <footer className="site-footer">
         <span><img src={siporiWordmark} alt="Sipori" /></span>
       </footer>

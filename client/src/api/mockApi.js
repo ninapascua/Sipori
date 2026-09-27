@@ -1,3 +1,4 @@
+import { validateCafeDraft } from '../../../shared/cafeDraft.mjs'
 // The simulated backend.
 //
 // Same function names, same return types, and the same shape of failure as
@@ -93,5 +94,29 @@ export async function getDrink(id) {
     throw new Error('Drink not found')
   }
 
+  return drink
+}
+
+export async function createCafeWithDrink(payload) {
+  const draft = validateCafeDraft(payload)
+  await delay()
+  const data = structuredClone(read())
+  const cafe = { ...draft.cafe, id: `cafe-${crypto.randomUUID()}` }
+  const drink = { ...draft.drink, id: `drink-${crypto.randomUUID()}`, cafeId: cafe.id }
+  data.cafes.unshift(cafe)
+  data.drinks.unshift(drink)
+  try { write(data) } catch { throw new Error('Could not save. Browser storage may be full; try smaller images.') }
+  return { cafe, drink }
+}
+
+export async function createDrink(cafeId, payload) {
+  await delay()
+  const data = structuredClone(read())
+  const cafe = data.cafes.find((item) => item.id === cafeId)
+  if (!cafe) throw new Error('Cafe not found')
+  const draft = validateCafeDraft({ cafe: { name: cafe.name }, drink: payload })
+  const drink = { ...draft.drink, id: `drink-${crypto.randomUUID()}`, cafeId }
+  data.drinks.unshift(drink)
+  try { write(data) } catch { throw new Error('Could not save. Browser storage may be full; try a smaller image.') }
   return drink
 }

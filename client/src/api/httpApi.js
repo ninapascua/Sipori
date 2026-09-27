@@ -40,3 +40,6 @@ export const listDrinksByCafe = (cafeId) =>
 
 export const getDrink = (id) =>
   request(`/api/drinks/${id}`)
+
+export const createCafeWithDrink = (draft) => request('/api/cafes', { method: 'POST', body: JSON.stringify(draft) })
+export const createDrink = (cafeId, drink) => request(`/api/cafes/${encodeURIComponent(cafeId)}/drinks`, { method: 'POST', body: JSON.stringify(drink) })

@@ -8,6 +8,7 @@ import { registerCafeRoutes } from './cafeRoutes.js'
 // running schema.sql and seed.sql against PostgreSQL for integration testing.
 async function withApi(query, check) {
   const app = express()
+  app.use(express.json())
   registerCafeRoutes(app, { query })
   app.use((error, request, response, next) => {
     response.status(500).json({ error: 'Something went wrong on the server' })
@@ -20,6 +21,28 @@ async function withApi(query, check) {
     await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()))
   }
 }
+
+test('adding a drink links it to the cafe and rejects invalid or missing records', async () => {
+  const draft = { name: 'Latte', type: 'matcha', price: 160, date: '2026-09-27', reorder: true, notes: '' }
+  const post = (base, body) => fetch(`${base}/api/cafes/cafe-1/drinks`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+  await withApi(async (sql, values) => {
+    assert.equal(values[1], 'cafe-1')
+    return { rows: [{ id: values[0] }] }
+  }, async base => {
+    const response = await post(base, draft)
+    assert.equal(response.status, 201)
+    const drink = await response.json()
+    assert.equal(drink.cafeId, 'cafe-1')
+    assert.equal(drink.name, 'Latte')
+    assert.equal(drink.rating, null)
+  })
+  await withApi(async () => { throw new Error('Validation must run before the query') }, async base => {
+    assert.equal((await post(base, { ...draft, price: -1 })).status, 400)
+  })
+  await withApi(async () => ({ rows: [] }), async base => {
+    assert.equal((await post(base, draft)).status, 404)
+  })
+})
 
 test('all five client endpoints return their expected response shape', async () => {
   const cafe = { id: 'cafe-1', name: 'Matcha Tokyo' }

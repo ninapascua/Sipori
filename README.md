@@ -176,3 +176,12 @@ visitor reads; that file is the record the badge is graded from.
 ## Licence
 
 MIT, see [LICENSE](LICENSE). Put your own name in it.
+
+### Cafe creation
+
+The Add Shop modal collects cafe details and requires the first drink before saving.
+Demo mode persists both records in one browser-storage write. The real API uses
+`POST /api/cafes` with `{ cafe, drink }` and a database transaction.
+Before using this with an existing PostgreSQL database, run `npm run db:schema`
+from `server` to add cafe image storage and allow drinks to remain unrated.
+Images are optional; ratings are not collected by this form.

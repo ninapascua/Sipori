@@ -42,3 +42,7 @@ CREATE TABLE IF NOT EXISTS drinks (
 -- Support newest-first browsing, both across all drinks and within one cafe.
 CREATE INDEX IF NOT EXISTS drinks_date_idx ON drinks (date DESC, id);
 CREATE INDEX IF NOT EXISTS drinks_cafe_date_idx ON drinks (cafe_id, date DESC, id);
+
+-- Cafe creation includes an optional image and an initially unrated drink.
+ALTER TABLE cafes ADD COLUMN IF NOT EXISTS photo_url TEXT NOT NULL DEFAULT '';
+ALTER TABLE drinks ALTER COLUMN rating DROP NOT NULL;

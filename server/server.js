@@ -18,7 +18,7 @@ const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:5173')
   .filter(Boolean)
 
 app.use(cors({ origin: allowedOrigins }))
-app.use(express.json({ limit: '100kb' }))
+app.use(express.json({ limit: '4mb' }))
 
 // Is the process alive?
 app.get('/healthz', (request, response) => {
