@@ -111,7 +111,7 @@ npm run dev
 curl http://localhost:3000/readyz
 ```
 
-Edit `db/schema.sql` to be your schema, and `sightingsRepo.js` to be your
+Edit `db/schema.sql` to be your schema, and `cafesRepo.js` to be your
 queries. Keep every query parameterised.
 
 ### Week three to four: get all three online

@@ -6,21 +6,6 @@
 -- rather than by connecting to a server. It is also what lets you move to a
 -- hosted database in one command.
 
-CREATE TABLE IF NOT EXISTS sightings (
-  id          SERIAL PRIMARY KEY,
-  place       TEXT        NOT NULL,
-  description TEXT        NOT NULL DEFAULT '',
-  spookiness  INTEGER     NOT NULL CHECK (spookiness BETWEEN 1 AND 5),
-  reported_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
--- The list page always sorts newest first. Without this the database reads
--- every row and sorts it on each request.
-CREATE INDEX IF NOT EXISTS sightings_reported_at_idx
-  ON sightings (reported_at DESC);
-
--- Sipori's IDs are strings in both API implementations (for example cafe-1).
--- These additions leave any existing template sightings data intact.
 CREATE TABLE IF NOT EXISTS cafes (
   id TEXT PRIMARY KEY,
   name TEXT NOT NULL CHECK (length(trim(name)) BETWEEN 1 AND 120)
