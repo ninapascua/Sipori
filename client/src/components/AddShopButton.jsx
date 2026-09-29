@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import outerStar from '../assets/outer1.png'
+import phoneOuterStar from '../assets/outer4.png'
+import usePhoneView from '../usePhoneView.js'
 
 export default function AddShopButton({ onClick }) {
+  const star = usePhoneView() ? phoneOuterStar : outerStar
   const pixels = useRef(null)
   const [overStar, setOverStar] = useState(false)
 
@@ -18,9 +21,9 @@ export default function AddShopButton({ onClick }) {
       context.drawImage(image, 0, 0)
       pixels.current = context.getImageData(0, 0, canvas.width, canvas.height)
     }
-    image.src = outerStar
+    image.src = star
     return () => { cancelled = true; pixels.current = null }
-  }, [])
+  }, [star])
 
   function checkStar(event) {
     const source = pixels.current

@@ -22,13 +22,13 @@ export default function Scrapbook({ drinks, status, error, onRetry }) {
   const photos = useMemo(() => selectMonthlyPhotos(drinks, month), [drinks, month, shuffle])
   const title = new Date(`${month}-01T12:00:00`).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })
 
-  return <main className="scrapbook" aria-label="Monthly drink scrapbook">
+  return <main className={`scrapbook${photos.length ? ' scrapbook-has-photos' : ''}`} aria-label="Monthly drink scrapbook">
     <div className="scrapbook-toolbar">
       <h1 className="sr-only">Drink scrapbook</h1>
       <time className="scrapbook-month" dateTime={month}>{title}</time>
       <button type="button" className="scrapbook-shuffle" disabled={photos.length < 2} onClick={() => setShuffle((value) => value + 1)}>shuffle photos</button>
     </div>
-    <div className="scrapbook-scroll" tabIndex={0} role="region" aria-label={title}>
+    <div className="scrapbook-canvas">
       <section className="scrapbook-page" aria-label={`${title} photos`}>
         <div className="scrapbook-decorations" aria-hidden="true">
           <img className="scrapbook-star scrapbook-star-pink" src={pinkStar} alt="" />
@@ -42,7 +42,7 @@ export default function Scrapbook({ drinks, status, error, onRetry }) {
         <img className="scrapbook-wordmark" src={wordmark} alt="Sipori" />
         {status === 'loading' && <p className="scrapbook-message" role="status">Gathering your sips…</p>}
         {status === 'error' && <div className="scrapbook-message" role="alert"><p>Could not load your photos. {error?.message}</p><button onClick={onRetry}>Try again</button></div>}
-        {status === 'ready' && photos.length === 0 && <div className="scrapbook-message"><h2>A fresh page for {title}</h2><p>Add a photo to a drink logged this month to start your scrapbook.</p><a href="#/">Visit your cafés</a></div>}
+        {status === 'ready' && photos.length === 0 && <div className="scrapbook-message scrapbook-empty"><h2>A fresh page for {title}</h2><p>Add a photo to a drink logged this month to start your scrapbook.</p><a href="#/">Visit your cafés</a></div>}
         {status === 'ready' && photos.map((drink, index) => {
           const [x, y, width, rotation] = placements[index]
           return <figure key={drink.id} className={`scrapbook-photo scrapbook-photo-${index}`} style={{ '--photo-x': `${x}%`, '--photo-y': `${y}%`, '--photo-width': `${width}%`, '--photo-rotation': `${rotation}deg` }}>

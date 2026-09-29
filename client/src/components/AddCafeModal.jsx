@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import outerStar from '../assets/outer2.png'
-import innerStar from '../assets/inner 2.png'
+import innerStar from '../assets/inner2.png'
+import phoneOuterStar from '../assets/outer6.png'
+import phoneInnerStar from '../assets/inner6.png'
+import usePhoneView from '../usePhoneView.js'
 
 export default function AddCafeModal({ onClose, onSave, cafe = null, initialDrink = null }) {
+  const phone = usePhoneView()
   const dialog = useRef(null)
   const fileInput = useRef(null)
   const [name, setName] = useState(cafe?.name || '')
@@ -145,8 +149,8 @@ export default function AddCafeModal({ onClose, onSave, cafe = null, initialDrin
           </form>
         </div>
       ) : <div className={`add-cafe-scene${changingStep ? ' is-leaving' : ''}`} inert={changingStep ? '' : undefined}>
-        <img className="modal-star modal-star-outer" src={outerStar} alt="" />
-        <img className="modal-star modal-star-inner" src={innerStar} alt="" />
+        <img className="modal-star modal-star-outer" src={phone ? phoneOuterStar : outerStar} alt="" />
+        <img className="modal-star modal-star-inner" src={phone ? phoneInnerStar : innerStar} alt="" />
         <form className="add-cafe-form" onSubmit={submit}>
           <h2 id="add-cafe-title">add café</h2>
           <input id="cafe-name" className="cafe-name-input" value={name}
