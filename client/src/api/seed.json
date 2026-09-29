@@ -169,6 +169,42 @@
       "notes": "The salty cream worked really well with the roasted tea.",
       "date": "2026-08-01",
       "photoUrl": ""
+    },
+    {
+      "id": "drink-tokyo-12",
+      "cafeId": "cafe-1",
+      "name": "Matcha Einspanner",
+      "type": "matcha",
+      "price": 200,
+      "rating": 5,
+      "reorder": true,
+      "notes": "Silky cream over earthy matcha. A lovely balance.",
+      "date": "2026-09-25",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-tokyo-13",
+      "cafeId": "cafe-1",
+      "name": "Oat Milk Matcha",
+      "type": "matcha",
+      "price": 180,
+      "rating": 4,
+      "reorder": true,
+      "notes": "Soft oat sweetness with a pleasantly grassy finish.",
+      "date": "2026-09-23",
+      "photoUrl": ""
+    },
+    {
+      "id": "drink-tokyo-14",
+      "cafeId": "cafe-1",
+      "name": "Honey Hojicha Latte",
+      "type": "hojicha",
+      "price": 185,
+      "rating": 4,
+      "reorder": true,
+      "notes": "Toasty tea with a gentle honey sweetness.",
+      "date": "2026-09-21",
+      "photoUrl": ""
     }
   ]
 }

@@ -107,3 +107,31 @@ test('untrusted IDs are passed as SQL parameters', async () => {
     assert.equal(response.status, 404)
   })
 })
+
+test('drink edits validate input and save rating; deletion returns correct status', async () => {
+  const draft = { name: 'Edited latte', type: 'matcha', rating: 5, price: 190, date: '2026-09-29', reorder: true, notes: 'Creamy' }
+  const put = (base, body) => fetch(`${base}/api/drinks/drink-1`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+  await withApi(async (sql, values) => {
+    assert.equal(values[0], 'drink-1')
+    if (sql.startsWith('UPDATE')) {
+      assert.ok(sql.split('RETURNING')[0].includes('rating=$9'))
+      assert.equal(values[8], 5)
+      assert.equal(values[1], draft.name)
+      return { rows: [{ ...draft, id: 'drink-1', rating: 5 }] }
+    }
+    assert.ok(sql.startsWith('DELETE FROM drinks WHERE id=$1'))
+    return { rows: [{ id: 'drink-1' }] }
+  }, async base => {
+    const response = await put(base, draft)
+    assert.equal(response.status, 200)
+    assert.equal((await response.json()).rating, 5)
+    assert.equal((await fetch(`${base}/api/drinks/drink-1`, { method: 'DELETE' })).status, 204)
+  })
+  await withApi(async () => { throw new Error('Invalid input must not reach storage') }, async base => {
+    assert.equal((await put(base, { ...draft, price: -1 })).status, 400)
+  })
+  await withApi(async () => ({ rows: [] }), async base => {
+    assert.equal((await put(base, draft)).status, 404)
+    assert.equal((await fetch(`${base}/api/drinks/missing`, { method: 'DELETE' })).status, 404)
+  })
+})

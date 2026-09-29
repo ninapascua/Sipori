@@ -30,6 +30,8 @@ const implementation = USING_MOCK_API ? mockApi : httpApi
 
 export const {
   createDrink,
+  updateDrink,
+  deleteDrink,
   createCafeWithDrink,
   listCafes,
   getCafe,

@@ -1124,3 +1124,149 @@ body { overflow: hidden; }
 @media (max-width: 599px) {
   .add-cafe-card > span { top: -2px; }
 }
+
+/* A selected sip opens as a full-width journal entry. */
+.drink-log-card { position: relative; }
+.drink-card-open { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; z-index: 1; }
+.drink-log-card:has(.drink-card-open:hover) { box-shadow: 0 5px 10px #350b0c55; }
+.drink-detail-card { width: 88%; margin-inline: auto; background: var(--pink); border-radius: 8px; box-shadow: 0 4px 4px #350b0c40; padding: clamp(22px, 3vw, 48px) clamp(22px, 4vw, 64px); min-height: 70%; }
+.drink-detail-title-row { display: flex; align-items: center; gap: 20px; padding: 0 10px 16px; border-bottom: 1px solid #350b0c66; }
+.drink-detail-title-row h2 { flex: 1; margin: 0; font-size: clamp(20px, 2vw, 32px); overflow-wrap: anywhere; }
+.drink-detail-actions { display: flex; gap: 20px; }
+.drink-detail-actions button { margin: 0; padding: 0 18px; border-radius: 999px; font-size: clamp(12px, 1vw, 16px); line-height: 1.4; color: var(--pink); }
+.drink-detail-actions .drink-delete { background: var(--bg); color: var(--fg); border-color: #350b0c66; }
+.drink-detail-columns { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); padding: 24px 10px 0; }
+.drink-detail-columns dl { margin: 0; display: flex; flex-direction: column; gap: 24px; font-size: clamp(13px, 1.2vw, 19px); }
+.drink-detail-columns dl > div { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 20px; align-items: baseline; }
+.drink-detail-columns dt { font-size: .9em; }
+.drink-detail-columns dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.drink-detail-rating { letter-spacing: 3px; }
+.drink-detail-type { text-transform: capitalize; }
+.drink-detail-notes { white-space: pre-wrap; }
+.drink-delete-confirm { border-top: 1px solid #350b0c66; margin-top: 24px; padding-top: 12px; }
+.drink-delete-confirm button { margin: 0 12px 0 0; }
+@media (max-width: 750px) {
+  .drink-detail-card { width: 100%; }
+  .drink-detail-columns { grid-template-columns: 1fr; gap: 24px; padding-inline: 0; }
+  .drink-detail-title-row { flex-wrap: wrap; padding-inline: 0; }
+  .drink-detail-columns dl > div { grid-template-columns: 60px minmax(0, 1fr); gap: 12px; }
+  .drink-detail-actions { gap: 12px; }
+}
+
+/* Turn the chosen card over, then reveal its journal entry. */
+.drink-card-scroll { perspective: 1400px; }
+.drink-card-grid { perspective: 1400px; }
+.drink-flip-out .drink-flip-target,
+.drink-flip-out .drink-detail-card {
+  animation: drink-flip-out 280ms cubic-bezier(.55, 0, 1, .45) both;
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+.drink-flip-in .drink-detail-card,
+.drink-flip-in .drink-flip-target {
+  animation: drink-flip-in 420ms cubic-bezier(.16, 1, .3, 1) both;
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+.drink-flip-out, .drink-flip-in { pointer-events: none; }
+.drink-flip-back { --flip-direction: -1; }
+.drink-flip-forward { --flip-direction: 1; }
+.drink-flip-out .drink-log-card:not(.drink-flip-target) { opacity: 0; transition: opacity 280ms ease; }
+#drink-detail-title:focus { outline: none; }
+@keyframes drink-flip-out {
+  from { transform: rotateY(0deg); opacity: 1; }
+  to { transform: rotateY(calc(-90deg * var(--flip-direction))); opacity: 0; }
+}
+@keyframes drink-flip-in {
+  from { transform: rotateY(calc(90deg * var(--flip-direction))); opacity: 0; }
+  to { transform: rotateY(0deg); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drink-flip-out .drink-flip-target, .drink-flip-out .drink-detail-card,
+  .drink-flip-in .drink-detail-card, .drink-flip-in .drink-flip-target { animation: none; }
+  .drink-flip-out .drink-log-card:not(.drink-flip-target) { transition: none; }
+}
+
+.drink-flip-in .drink-log-card:not(.drink-flip-target) { animation: drink-neighbors-in 420ms ease-out both; }
+@keyframes drink-neighbors-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .drink-flip-in .drink-log-card:not(.drink-flip-target) { animation: none; }
+}
+
+.drink-rating-field { min-width: 0; }
+.drink-rating-stars { display: flex; flex-wrap: wrap; gap: 4px; }
+.drink-rating-stars button { margin: 0; padding: 0 3px; min-width: 30px; min-height: 36px; border: 0; background: transparent; color: var(--fg); font-size: 28px; line-height: 1; }
+.drink-rating-stars button:hover { color: var(--accent); transform: scale(1.1); }
+/* Monthly scrapbook: uploaded photos tucked into scattered paper frames. */
+.scrapbook { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; position: relative; }
+.scrapbook-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; padding: 8px 0; }
+.scrapbook-month { color: var(--fg); font-family: 'Luxurious Script', cursive; font-size: clamp(22px, 2.5vw, 36px); }
+.scrapbook-shuffle { margin: 0; background: transparent; color: var(--fg); border: 0; padding: 2px 8px; }
+.scrapbook-shuffle { font-size: 12px; text-decoration: underline; }
+.scrapbook-scroll { flex: 1; min-height: 0; overflow: auto; scrollbar-width: thin; }
+.scrapbook-page { position: relative; isolation: isolate; width: 100%; height: 100%; min-height: max(440px, 48vw); }
+.scrapbook-decor { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; z-index: -1; pointer-events: none; }
+.scrapbook-wordmark { position: absolute; width: 18%; height: 17%; object-fit: contain; left: 41%; top: 1%; z-index: 2; }
+.scrapbook-photo { position: absolute; left: var(--photo-x); top: var(--photo-y); width: var(--photo-width); height: 34%; margin: 0; padding: 9px 9px 27px; background: #faf9f4; box-shadow: 0 1px 3px #350b0c45; transform: rotate(var(--photo-rotation)); transition: transform 200ms ease; }
+.scrapbook-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.scrapbook-photo figcaption { position: absolute; bottom: 4px; left: 8px; right: 8px; font-size: clamp(9px, .8vw, 13px); text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.scrapbook-photo:hover { z-index: 3; transform: rotate(0deg) scale(1.04); }
+.scrapbook-photo-2::after, .scrapbook-photo-7::after { content: ''; position: absolute; right: 10px; top: -10px; width: 10px; height: 43px; border: 2px solid #bbb6ab; border-radius: 8px; box-shadow: 1px 0 1px #fff; }
+.scrapbook-photo[data-failed]::before { content: 'Photo unavailable'; position: absolute; inset: 30% 5% auto; text-align: center; font-size: 12px; }
+.scrapbook-message { position: absolute; top: 35%; left: 20%; width: 60%; padding: 30px; text-align: center; background: #f2ebdbee; border: 1px solid #350b0c30; border-radius: 5px; }
+.scrapbook-message a { color: var(--fg); }
+@media (max-width: 650px) {
+  .scrapbook-toolbar { justify-content: center; gap: 5px; flex-wrap: wrap; }
+  .scrapbook-page { height: auto; min-height: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 28px 18px; padding: 100px 18px 35px; }
+  .scrapbook-wordmark { top: 5px; left: 30%; width: 40%; height: 75px; }
+  .scrapbook-photo { position: relative; inset: auto; width: 100%; height: auto; aspect-ratio: .83; padding: 7px 7px 25px; }
+  .scrapbook-photo figcaption { font-size: 10px; }
+  .scrapbook-message { position: relative; inset: auto; grid-column: 1 / -1; width: 100%; padding: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { .scrapbook-photo { transition: none; } }
+
+/* Botanical stickers from the supplied scrapbook assets 11?15. */
+.scrapbook-decorations { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.scrapbook-sticker { position: absolute; object-fit: contain; }
+.scrapbook-leaves { left: -3%; top: 5%; width: 23%; height: 46%; transform: rotate(25deg); }
+.scrapbook-sketch { left: 33%; top: 30%; width: 35%; height: 66%; transform: rotate(10deg); }
+.scrapbook-doily { left: 15%; top: 22%; width: 30%; height: 55%; transform: rotate(-12deg); }
+.scrapbook-lotus { right: 12%; bottom: 1%; width: 15%; height: 27%; }
+.scrapbook-butterfly { right: 1%; top: 18%; width: 13%; height: 24%; transform: rotate(-23deg); }
+.scrapbook-star { position: absolute; width: auto; object-fit: contain; }
+.scrapbook-star-pink { left: 0; bottom: 0; height: 65%; }
+.scrapbook-star-green { right: 0; top: 2%; height: 67%; }
+@media (max-width: 650px) {
+  .scrapbook-leaves { width: 40%; height: 260px; }
+  .scrapbook-sketch { left: 10%; width: 75%; height: 400px; }
+  .scrapbook-doily { left: 5%; width: 65%; height: 300px; }
+  .scrapbook-lotus { width: 30%; height: 180px; }
+  .scrapbook-butterfly { width: 25%; height: 150px; }
+}
+
+/* Full-bleed collage edges echo the original scrapbook composition. */
+.scrapbook { margin-inline: calc(-1 * var(--page-gutter)); }
+.scrapbook-toolbar { padding-inline: var(--page-gutter); }
+.scrapbook-page { min-height: max(440px, 43vw); }
+.scrapbook-leaves { left: -5%; top: 5%; width: 22%; height: 49%; transform: rotate(31deg); }
+.scrapbook-sketch { left: 34%; top: 37%; width: 29%; height: 61%; }
+.scrapbook-doily { left: 25%; top: 31%; width: 20%; height: 37%; }
+.scrapbook-lotus { right: 17%; bottom: 1%; width: 13%; height: 27%; }
+.scrapbook-butterfly { right: 7%; top: 17%; width: 12%; height: 26%; }
+.scrapbook-photo-1 { height: 39%; }
+.scrapbook-photo-5 { height: 38%; }
+.scrapbook-photo-8 { height: 31%; }
+@media (max-width: 650px) {
+  .scrapbook { margin-inline: -18px; }
+  .scrapbook-toolbar { padding-inline: 18px; }
+  .scrapbook-page { min-height: 100%; padding-inline: 28px; }
+  .scrapbook-photo { height: auto; }
+  .scrapbook-star { max-width: 42%; height: 330px; }
+  .scrapbook-leaves { left: -12%; width: 50%; height: 260px; }
+  .scrapbook-sketch { left: 10%; width: 75%; height: 400px; }
+  .scrapbook-doily { left: 5%; width: 65%; height: 300px; }
+  .scrapbook-lotus { right: 0; width: 30%; height: 180px; }
+  .scrapbook-butterfly { right: 0; width: 25%; height: 150px; }
+}

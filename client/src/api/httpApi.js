@@ -43,3 +43,6 @@ export const getDrink = (id) =>
 
 export const createCafeWithDrink = (draft) => request('/api/cafes', { method: 'POST', body: JSON.stringify(draft) })
 export const createDrink = (cafeId, drink) => request(`/api/cafes/${encodeURIComponent(cafeId)}/drinks`, { method: 'POST', body: JSON.stringify(drink) })
+
+export const updateDrink = (id, drink) => request(`/api/drinks/${encodeURIComponent(id)}`, { method: 'PUT', body: JSON.stringify(drink) })
+export const deleteDrink = (id) => request(`/api/drinks/${encodeURIComponent(id)}`, { method: 'DELETE' })

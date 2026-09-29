@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import outerStar from '../assets/outer2.png'
 import innerStar from '../assets/inner 2.png'
 
-export default function AddCafeModal({ onClose, onSave, cafe = null }) {
+export default function AddCafeModal({ onClose, onSave, cafe = null, initialDrink = null }) {
   const dialog = useRef(null)
   const fileInput = useRef(null)
   const [name, setName] = useState(cafe?.name || '')
@@ -14,7 +14,7 @@ export default function AddCafeModal({ onClose, onSave, cafe = null }) {
   const [changingStep, setChangingStep] = useState(false)
   const saving = useRef(false)
   const drinkHeading = useRef(null)
-  const [drink, setDrink] = useState({ date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10), type: 'hojicha', name: '', price: '', reorder: true, notes: '', photoUrl: '' })
+  const [drink, setDrink] = useState(initialDrink || { date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10), type: 'hojicha', name: '', price: '', rating: null, reorder: true, notes: '', photoUrl: '' })
   useEffect(() => { if (step === 'drink') drinkHeading.current?.focus() }, [step])
   function updateDrink(key, value) { setDrink((current) => ({ ...current, [key]: value })) }
 
@@ -102,7 +102,7 @@ export default function AddCafeModal({ onClose, onSave, cafe = null }) {
         <div className="drink-scene">
           <form className="add-drink-form" onSubmit={submit} aria-busy={busy}>
             <header className="drink-form-heading">
-              <h2 id="add-cafe-title" ref={drinkHeading} tabIndex={-1}>add drink</h2>
+              <h2 id="add-cafe-title" ref={drinkHeading} tabIndex={-1}>{initialDrink ? 'edit drink' : 'add drink'}</h2>
               <input ref={fileInput} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={selectImage} />
               <button type="button" className="drink-image-button" disabled={busy || closing} onClick={() => fileInput.current.click()}>
                 {drink.photoUrl ? <img src={drink.photoUrl} alt="Drink preview" /> : <span aria-hidden="true">+</span>}
@@ -118,6 +118,16 @@ export default function AddCafeModal({ onClose, onSave, cafe = null }) {
               </div>
               <label htmlFor="drink-name">Name:</label>
               <input id="drink-name" value={drink.name} required maxLength={120} onChange={(event) => updateDrink('name', event.target.value)} />
+              <span id="drink-rating-label">Rating:</span>
+              <div className="drink-rating-field">
+                <div className="drink-rating-stars" role="group" aria-labelledby="drink-rating-label">
+                  {[1, 2, 3, 4, 5].map((rating) => <button type="button" key={rating}
+                    aria-label={`${rating} ${rating === 1 ? 'star' : 'stars'}`} aria-pressed={drink.rating === rating}
+                    onClick={() => updateDrink('rating', rating)}>
+                    <span aria-hidden="true">{rating <= (drink.rating || 0) ? '★' : '☆'}</span>
+                  </button>)}
+                </div>
+              </div>
               <label htmlFor="drink-price">Price:</label>
               <input id="drink-price" type="number" min="0" max="99999999.99" step="0.01" inputMode="decimal" value={drink.price} required onChange={(event) => updateDrink('price', event.target.value)} />
               <span id="drink-reorder-label">Reorder:</span>

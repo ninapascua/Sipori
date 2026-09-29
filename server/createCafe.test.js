@@ -31,3 +31,14 @@ test('failure saving the first drink rolls back the cafe', async () => {
   assert.ok(!queries.includes('COMMIT'))
   assert.ok(released)
 })
+
+ test('ratings are optional, bounded integers and persist with the first drink', async () => {
+  for (const rating of [0, 6, 2.5, '5']) assert.throws(() => validateCafeDraft({ ...payload, drink: { ...payload.drink, rating } }))
+  for (const rating of [null, 1, 5]) {
+    const draft = validateCafeDraft({ ...payload, drink: { ...payload.drink, rating } })
+    const queries = []
+    const saved = await createCafeWithDrink({ connect: async () => ({ query: async (sql, values) => queries.push({ sql, values }), release() {} }) }, draft)
+    assert.equal(saved.drink.rating, rating)
+    assert.equal(queries[2].values[5], rating)
+  }
+})

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { listCafes, listDrinks, createCafeWithDrink, createDrink } from './api'
+import { listCafes, listDrinks, createCafeWithDrink, createDrink, updateDrink, deleteDrink } from './api'
+import Scrapbook from './components/Scrapbook.jsx'
 import CafePage from './components/CafePage.jsx'
 import DemoNotice from './components/DemoNotice.jsx'
 import AddShopButton from './components/AddShopButton.jsx'
@@ -30,6 +31,7 @@ export default function App() {
     window.addEventListener('hashchange', updateRoute)
     return () => window.removeEventListener('hashchange', updateRoute)
   }, [])
+  const scrapbookRoute = route === '#scrapbook' || route === '#/scrapbook'
   const cafeRoute = route.startsWith('#/cafes/')
   const selectedCafe = cafes.find((cafe) => `#/cafes/${encodeURIComponent(cafe.id)}` === route)
 
@@ -111,10 +113,10 @@ export default function App() {
           <span /><span /><span />
         </button>
         <nav id="main-navigation" className={`nav${menuOpen ? ' is-open' : ''}`} aria-label="Main navigation">
-          <a className="nav-link active" href="#/" aria-current={cafeRoute ? undefined : 'page'}>
+          <a className={`nav-link${scrapbookRoute ? '' : ' active'}`} href="#/" aria-current={scrapbookRoute ? undefined : 'page'}>
             Cafés
           </a>
-          <a className="nav-link" href="#scrapbook">
+          <a className={`nav-link${scrapbookRoute ? ' active' : ''}`} href="#scrapbook" aria-current={scrapbookRoute ? 'page' : undefined}>
             Scrapbook
           </a>
         </nav>
@@ -122,7 +124,7 @@ export default function App() {
 
       <DemoNotice />
 
-      {cafeRoute ? <CafePage key={route} cafe={selectedCafe} drinks={selectedCafe ? getCafeDrinks(selectedCafe.id) : []} status={status} error={error} onRetry={load} onAddDrink={() => setAddingDrink(true)} /> : <main className="main-content">
+      {scrapbookRoute ? <Scrapbook drinks={drinks} status={status} error={error} onRetry={load} /> : cafeRoute ? <CafePage key={route} cafe={selectedCafe} drinks={selectedCafe ? getCafeDrinks(selectedCafe.id) : []} status={status} error={error} onRetry={load} onAddDrink={() => setAddingDrink(true)} onUpdateDrink={async (id, draft) => { const saved = await updateDrink(id, draft); setDrinks((current) => current.map((drink) => drink.id === id ? saved : drink)) }} onDeleteDrink={async (id) => { await deleteDrink(id); setDrinks((current) => current.filter((drink) => drink.id !== id)) }} /> : <main className="main-content">
         <section className="page-heading">
           <h1>Cafés</h1>
 

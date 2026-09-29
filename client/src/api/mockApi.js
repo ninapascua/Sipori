@@ -12,6 +12,15 @@ import { validateCafeDraft } from '../../../shared/cafeDraft.mjs'
 import seed from './seed.json'
 
 const KEY = 'sipori:data'
+const TOKYO_DEMO_VERSION = 'tokyo-six-drinks-v1'
+
+function addTokyoSamples(data) {
+  if (data.demoUpdates?.includes(TOKYO_DEMO_VERSION)) return false
+  const ids = new Set(data.drinks.map((drink) => drink.id))
+  data.drinks.push(...seed.drinks.filter((drink) => drink.id.startsWith('drink-tokyo-') && !ids.has(drink.id)))
+  data.demoUpdates = [...(data.demoUpdates || []), TOKYO_DEMO_VERSION]
+  return true
+}
 
 // A real network is not instant. Keeping this delay is what forces you to build
 // a loading state now, while it is cheap, instead of discovering you need one
@@ -26,7 +35,8 @@ function read() {
       // Add new demo shops to existing browsers without replacing saved entries.
       const existingIds = new Set(data.cafes.map((cafe) => cafe.id))
       const addedCafes = seed.cafes.filter((cafe) => !existingIds.has(cafe.id))
-      if (addedCafes.length > 0) {
+      const addedSamples = addTokyoSamples(data)
+      if (addedCafes.length > 0 || addedSamples) {
         data.cafes.push(...addedCafes)
         write(data)
       }
@@ -36,8 +46,10 @@ function read() {
       localStorage.removeItem(KEY)
     }
   }
-  localStorage.setItem(KEY, JSON.stringify(seed))
-  return seed
+  const initial = structuredClone(seed)
+  addTokyoSamples(initial)
+  write(initial)
+  return initial
 }
 
 function write(data) {
@@ -119,4 +131,23 @@ export async function createDrink(cafeId, payload) {
   data.drinks.unshift(drink)
   try { write(data) } catch { throw new Error('Could not save. Browser storage may be full; try a smaller image.') }
   return drink
+}
+
+export async function updateDrink(id, payload) {
+  const draft = validateCafeDraft({ cafe: { name: 'Existing cafe' }, drink: payload }).drink
+  await delay()
+  const data = structuredClone(read())
+  const index = data.drinks.findIndex((drink) => drink.id === id)
+  if (index < 0) throw new Error('Drink not found')
+  data.drinks[index] = { ...data.drinks[index], ...draft }
+  write(data)
+  return data.drinks[index]
+}
+
+export async function deleteDrink(id) {
+  await delay()
+  const data = structuredClone(read())
+  if (!data.drinks.some((drink) => drink.id === id)) throw new Error('Drink not found')
+  data.drinks = data.drinks.filter((drink) => drink.id !== id)
+  write(data)
 }
