@@ -26,7 +26,11 @@ export default function Scrapbook({ drinks, status, error, onRetry }) {
     <div className="scrapbook-toolbar">
       <h1 className="sr-only">Drink scrapbook</h1>
       <time className="scrapbook-month" dateTime={month}>{title}</time>
-      <button type="button" className="scrapbook-shuffle" disabled={photos.length < 2} onClick={() => setShuffle((value) => value + 1)}>shuffle photos</button>
+      <button type="button" className="scrapbook-shuffle" aria-label="Shuffle photos" title="Shuffle photos" disabled={photos.length < 2} onClick={() => setShuffle((value) => value + 1)}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+          <path d="M3 6h2c5 0 9 12 14 12h2m-4-4 4 4-4 4M3 18h2c2 0 4-2 5-4m4-4c2-3 3-4 5-4h2m-4-4 4 4-4 4" />
+        </svg>
+      </button>
     </div>
     <div className="scrapbook-canvas">
       <section className="scrapbook-page" aria-label={`${title} photos`}>

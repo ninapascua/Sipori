@@ -3,6 +3,7 @@ import cors from 'cors'
 import { pool } from './db/pool.js'
 import { registerCafeRoutes } from './cafeRoutes.js'
 import { installAuth } from './auth.js'
+import { errorHandler } from './errorHandler.js'
 
 const app = express()
 
@@ -53,10 +54,7 @@ app.use((request, response) => {
 
 // The detail goes in your logs; the visitor gets a plain message. Sending a
 // stack trace to a stranger tells them about your file layout and dependencies.
-app.use((error, request, response, next) => {
-  console.error(error)
-  response.status(500).json({ error: 'Something went wrong on the server' })
-})
+app.use(errorHandler)
 
 // The host chooses the port and tells you through PORT. Hardcoding 3000 is the
 // commonest reason a first deploy is marked unhealthy and killed.

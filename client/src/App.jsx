@@ -16,7 +16,7 @@ import siporiWordmark from './assets/sipori-wordmark.png'
 // message that admits a free-tier server can be slow to wake, and errors that
 // say something rather than rendering an empty list.
 
-export default function App() {
+export default function App({ logoutControl }) {
   const [status, setStatus] = useState('loading')
   const [cafes, setCafes] = useState([])
   const [drinks, setDrinks] = useState([])
@@ -120,6 +120,7 @@ export default function App() {
           <a className={`nav-link${scrapbookRoute ? ' active' : ''}`} href="#scrapbook" aria-current={scrapbookRoute ? 'page' : undefined}>
             Scrapbook
           </a>
+          {logoutControl}
         </nav>
       </header>
 

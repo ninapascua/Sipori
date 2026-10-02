@@ -48,10 +48,16 @@ export default function AuthGate({ children }) {
     finally { setBusy(false) }
   }
   if (state === 'checking') return <main className="login-page"><p role="status">Opening Sipori…</p></main>
-  if (state === 'authenticated') return <>
-    <div className="owner-session"><button type="button" onClick={leave} disabled={busy}>{busy ? 'Logging out…' : 'Log out'}</button>{error && <p role="alert">{error}</p>}</div>
-    {children}
-  </>
+  if (state === 'authenticated') return children(
+    <div className="owner-session">
+      <button type="button" onClick={leave} disabled={busy} aria-label={busy ? 'Logging out' : 'Log out'} title="Log out" aria-busy={busy}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+          <path d="M9 5H5v14h4M10 12h10m-4-4 4 4-4 4" />
+        </svg>
+      </button>
+      {error && <p role="alert">{error}</p>}
+    </div>
+  )
   return <main className="login-page">
     <div className="login-scene">
     <img className="login-star login-star-left" src={leftStar} alt="" aria-hidden="true" />

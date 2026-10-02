@@ -11,19 +11,16 @@ if (!process.env.DATABASE_URL) {
   process.exit(1)
 }
 
-// A local PostgreSQL has no TLS configured. Every managed host requires it and
-// presents a certificate chain Node does not trust out of the box, which is why
-// rejectUnauthorized is false: the connection is still encrypted, it is just not
-// verifying who is on the other end. That is the standard tradeoff for a
-// student project. If your host publishes a CA certificate, pass it as
-// ssl: { ca: readFileSync('ca.pem') } instead and say so in your journal.
-const isLocal =
-  process.env.DATABASE_URL.includes('localhost') ||
-  process.env.DATABASE_URL.includes('127.0.0.1')
+// Preserve the existing remote TLS setting until the host's CA is configured.
+// Traffic is encrypted, but the server certificate is not verified. The current
+// connection fails with SELF_SIGNED_CERT_IN_CHAIN when verification is enabled.
+// Local/private databases can explicitly disable TLS (e.g. the Compose service).
+const isLocal = ['localhost', '127.0.0.1', '[::1]'].includes(new URL(process.env.DATABASE_URL).hostname)
+const useSsl = process.env.DATABASE_SSL === 'false' ? false : process.env.DATABASE_SSL === 'true' || !isLocal
 
 export const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: isLocal ? false : { rejectUnauthorized: false },
+  ssl: useSsl ? { rejectUnauthorized: false } : false,
   max: 5,                          // free tiers allow far fewer than you think
   idleTimeoutMillis: 10_000,       // hand connections back quickly
   connectionTimeoutMillis: 5_000,  // fail fast rather than hanging the request

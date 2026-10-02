@@ -10,6 +10,13 @@ test('a cafe cannot be created without a valid first drink', () => {
   }
   assert.equal(validateCafeDraft(payload).drink.rating, null)
 })
+
+test('dates reject PostgreSQL year zero and invalid leap days', () => {
+  for (const date of ['0000-01-01', '2025-02-29', '2026-13-01']) {
+    assert.throws(() => validateCafeDraft({ ...payload, drink: { ...payload.drink, date } }), /valid date/)
+  }
+  assert.equal(validateCafeDraft({ ...payload, drink: { ...payload.drink, date: '2024-02-29' } }).drink.date, '2024-02-29')
+})
 test('cafe and first drink commit together with linked IDs', async () => {
   const queries = []
   let released = false

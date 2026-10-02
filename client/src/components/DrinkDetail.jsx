@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import AddCafeModal from './AddCafeModal.jsx'
 
-export default function DrinkDetail({ drink, cafe, onUpdate, onDelete }) {
+export default function DrinkDetail({ drink, cafe, onUpdate, onDelete, onFlipBack, flipping }) {
   const [editing, setEditing] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -16,6 +16,7 @@ export default function DrinkDetail({ drink, cafe, onUpdate, onDelete }) {
 
   return <>
     <article className="drink-detail-card" aria-labelledby="drink-detail-title">
+      <button type="button" className="drink-detail-flip" aria-label="Flip back to drink cards" onClick={onFlipBack} disabled={busy || confirming || editing || flipping} />
       <header className="drink-detail-title-row">
         <h2 id="drink-detail-title" tabIndex={-1}>{drink.name}</h2>
         <div className="drink-detail-actions">

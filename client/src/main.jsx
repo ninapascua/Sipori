@@ -6,6 +6,6 @@ import './styles.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthGate><App /></AuthGate>
+    <AuthGate>{(logoutControl) => <App logoutControl={logoutControl} />}</AuthGate>
   </StrictMode>
 )

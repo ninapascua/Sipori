@@ -1,9 +1,6 @@
-// The real client. Every function here talks to YOUR Express API.
-//
-// This is the file that matters for your finals project. mockApi.js exists so
-// you can build the interface before this has anywhere to point.
+// All owner data goes through the authenticated Express API.
 
-const BASE = import.meta.env.VITE_API_BASE_URL || ''
+const BASE = (import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/+$/, '')
 
 async function request(path, options) {
   const response = await fetch(`${BASE}${path}`, {
@@ -38,16 +35,16 @@ export const listCafes = () =>
   request('/api/cafes')
 
 export const getCafe = (id) =>
-  request(`/api/cafes/${id}`)
+  request(`/api/cafes/${encodeURIComponent(id)}`)
 
 export const listDrinks = () =>
   request('/api/drinks')
 
 export const listDrinksByCafe = (cafeId) =>
-  request(`/api/cafes/${cafeId}/drinks`)
+  request(`/api/cafes/${encodeURIComponent(cafeId)}/drinks`)
 
 export const getDrink = (id) =>
-  request(`/api/drinks/${id}`)
+  request(`/api/drinks/${encodeURIComponent(id)}`)
 
 export const createCafeWithDrink = (draft) => request('/api/cafes', { method: 'POST', body: JSON.stringify(draft) })
 export const createDrink = (cafeId, drink) => request(`/api/cafes/${encodeURIComponent(cafeId)}/drinks`, { method: 'POST', body: JSON.stringify(drink) })

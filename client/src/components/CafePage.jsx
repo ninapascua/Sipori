@@ -56,7 +56,7 @@ export default function CafePage({ cafe, drinks, status, error, onRetry, onAddDr
     <AddDrinkButton onClick={onAddDrink} disabled={!cafe || status !== 'ready'} />
     <section className="cafe-detail-panel" aria-labelledby="cafe-detail-title">
       <header className="cafe-detail-heading">
-        <a className="cafe-back" href="#/" aria-label={selectedDrink ? "Back to drinks" : "Back to cafes"} onClick={(event) => { if (selectedDrink) { event.preventDefault(); showDrink(null) } }}>
+        <a className="cafe-back" href="#/" aria-label="Back to cafes">
           <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M20 12H4m6-6-6 6 6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -71,7 +71,7 @@ export default function CafePage({ cafe, drinks, status, error, onRetry, onAddDr
         {status === 'loading' && <p role="status">Loading café...</p>}
         {status === 'error' && <div role="alert"><p>Could not load this café. {error?.message}</p><button onClick={onRetry}>Try again</button></div>}
         {status === 'ready' && !cafe && <p>This café could not be found. <a href="#/">Back to cafés</a></p>}
-        {status === 'ready' && cafe && (selectedDrink ? <DrinkDetail key={selectedDrink.id} drink={selectedDrink} cafe={cafe} onUpdate={onUpdateDrink} onDelete={async (id) => { await onDeleteDrink(id); setSelectedId(null) }} /> : filtered.length ? <div className="drink-card-grid">
+        {status === 'ready' && cafe && (selectedDrink ? <DrinkDetail key={selectedDrink.id} drink={selectedDrink} cafe={cafe} onFlipBack={() => showDrink(null)} flipping={!!flip} onUpdate={onUpdateDrink} onDelete={async (id) => { await onDeleteDrink(id); setSelectedId(null) }} /> : filtered.length ? <div className="drink-card-grid">
           {filtered.map((drink) => <article className={`drink-log-card${flip?.cardId === drink.id ? ' drink-flip-target' : ''}`} key={drink.id}>
             <button type="button" className="drink-card-open" data-drink-id={drink.id} aria-label={`View ${drink.name}`} disabled={!!flip} onClick={() => showDrink(drink.id)} />
             <div className={`drink-log-photo ${drink.type}`}>

@@ -76,9 +76,11 @@ Never put a key, a password or a connection string in one.
 The repository must be **public** for Pages to serve it on a free account.
 
 **API and database.** Not automated here, because most hosts deploy straight from
-your repository with no workflow at all. Point your host at the `server/` folder,
-set the environment variables in its dashboard, and run `server/db/schema.sql`
-once against the hosted database.
+your repository with no workflow at all. Keep the repository root available:
+the API imports validation from `shared/`. Build with `npm ci --prefix server`
+and start with `npm start --prefix server`, or build the root Docker context
+with `server/Dockerfile`. Set the environment variables in the host dashboard,
+and run `server/db/schema.sql` once against the hosted database.
 
 ## Project structure
 

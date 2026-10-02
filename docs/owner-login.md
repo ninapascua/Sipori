@@ -25,6 +25,16 @@ generated in `server/.env`. Set `NODE_ENV=production`, use HTTPS, and set
 Deploy both the updated API and frontend. Old deployed bundles may still contain
 previously public demo records; login cannot retract previously published data.
 
+For Docker Compose, copy the generated owner settings into the root `.env`
+alongside `POSTGRES_PASSWORD` and `CORS_ORIGINS`. Compose builds from the repository
+root to include `shared/`, and disables database TLS only for its private `db`
+service. A production frontend must reach the API through HTTPS.
+
+The existing remote database connection uses encrypted TLS without certificate
+verification. A verification check returned `SELF_SIGNED_CERT_IN_CHAIN`. Configure
+a trusted database CA and enable verification in `server/db/pool.js` before
+treating database transport security as complete.
+
 Prefer serving frontend and API from the same site. If using different sites
 (for example GitHub Pages and Render), set `AUTH_CROSS_SITE=true` on the API.
 This uses `SameSite=None; Secure` cookies, which some browsers block as third-party
