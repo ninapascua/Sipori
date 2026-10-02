@@ -71,7 +71,7 @@ export default function CafePage({ cafe, drinks, status, error, onRetry, onAddDr
         {status === 'loading' && <p role="status">Loading café...</p>}
         {status === 'error' && <div role="alert"><p>Could not load this café. {error?.message}</p><button onClick={onRetry}>Try again</button></div>}
         {status === 'ready' && !cafe && <p>This café could not be found. <a href="#/">Back to cafés</a></p>}
-        {status === 'ready' && cafe && (selectedDrink ? <DrinkDetail key={selectedDrink.id} drink={selectedDrink} cafe={cafe} onFlipBack={() => showDrink(null)} flipping={!!flip} onUpdate={onUpdateDrink} onDelete={async (id) => { await onDeleteDrink(id); setSelectedId(null) }} /> : filtered.length ? <div className="drink-card-grid">
+        {status === 'ready' && cafe && (selectedDrink ? <DrinkDetail key={selectedDrink.id} drink={selectedDrink} cafe={cafe} isLastDrink={drinks.length === 1} onFlipBack={() => showDrink(null)} flipping={!!flip} onUpdate={onUpdateDrink} onDelete={async (id) => { await onDeleteDrink(id); setSelectedId(null) }} /> : filtered.length ? <div className="drink-card-grid">
           {filtered.map((drink) => <article className={`drink-log-card${flip?.cardId === drink.id ? ' drink-flip-target' : ''}`} key={drink.id}>
             <button type="button" className="drink-card-open" data-drink-id={drink.id} aria-label={`View ${drink.name}`} disabled={!!flip} onClick={() => showDrink(drink.id)} />
             <div className={`drink-log-photo ${drink.type}`}>

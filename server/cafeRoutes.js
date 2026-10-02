@@ -16,8 +16,9 @@ export function registerCafeRoutes(app, pool) {
   })
   app.delete('/api/drinks/:id', async (request, response, next) => {
     try {
-      if (!await cafes.deleteDrink(pool, request.params.id)) return response.status(404).json({ error: 'Drink not found' })
-      response.status(204).end()
+      const result = await cafes.deleteDrink(pool, request.params.id)
+      if (!result) return response.status(404).json({ error: 'Drink not found' })
+      response.json(result)
     } catch (error) { next(error) }
   })
   app.post('/api/cafes/:id/drinks', async (request, response, next) => {

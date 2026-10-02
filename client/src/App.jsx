@@ -126,7 +126,7 @@ export default function App({ logoutControl }) {
 
       <DemoNotice />
 
-      {scrapbookRoute ? <Scrapbook drinks={drinks} status={status} error={error} onRetry={load} /> : cafeRoute ? <CafePage key={route} cafe={selectedCafe} drinks={selectedCafe ? getCafeDrinks(selectedCafe.id) : []} status={status} error={error} onRetry={load} onAddDrink={() => setAddingDrink(true)} onUpdateDrink={async (id, draft) => { const saved = await updateDrink(id, draft); setDrinks((current) => current.map((drink) => drink.id === id ? saved : drink)) }} onDeleteDrink={async (id) => { await deleteDrink(id); setDrinks((current) => current.filter((drink) => drink.id !== id)) }} /> : <main className="main-content">
+      {scrapbookRoute ? <Scrapbook drinks={drinks} status={status} error={error} onRetry={load} /> : cafeRoute ? <CafePage key={route} cafe={selectedCafe} drinks={selectedCafe ? getCafeDrinks(selectedCafe.id) : []} status={status} error={error} onRetry={load} onAddDrink={() => setAddingDrink(true)} onUpdateDrink={async (id, draft) => { const saved = await updateDrink(id, draft); setDrinks((current) => current.map((drink) => drink.id === id ? saved : drink)) }} onDeleteDrink={async (id) => { const result = await deleteDrink(id); setDrinks((current) => current.filter((drink) => drink.id !== id)); if (result?.deletedCafeId) { setCafes((current) => current.filter((cafe) => cafe.id !== result.deletedCafeId)); window.location.hash = '#/' } }} /> : <main className="main-content">
         <section className="page-heading">
           <h1>Cafés</h1>
 
@@ -186,7 +186,7 @@ export default function App({ logoutControl }) {
                           }
                         }}
                       />
-                      <h2>{cafe.name}</h2>
+                      <h2 className={Array.from(cafe.name.trim()).length > 5 ? 'cafe-name-long' : undefined}>{cafe.name}</h2>
                     </div>
 
                     <div className="cafe-card-content">

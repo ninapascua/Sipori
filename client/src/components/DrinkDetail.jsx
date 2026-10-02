@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import AddCafeModal from './AddCafeModal.jsx'
 
-export default function DrinkDetail({ drink, cafe, onUpdate, onDelete, onFlipBack, flipping }) {
+export default function DrinkDetail({ drink, cafe, onUpdate, onDelete, onFlipBack, flipping, isLastDrink }) {
   const [editing, setEditing] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -37,9 +37,9 @@ export default function DrinkDetail({ drink, cafe, onUpdate, onDelete, onFlipBac
         </dl>
       </div>
       {confirming && <div className="drink-delete-confirm" role="group" aria-label="Confirm deletion">
-        <p>Delete this drink?</p>
+        <p>{isLastDrink ? `This is the last drink in ${cafe.name}. Deleting it will also delete the shop. This cannot be undone.` : 'Delete this drink? If it is the shop’s last remaining drink, the shop will also be deleted. This cannot be undone.'}</p>
         <button type="button" disabled={busy} onClick={() => setConfirming(false)}>keep drink</button>
-        <button type="button" disabled={busy} onClick={remove}>{busy ? 'deleting…' : 'delete drink'}</button>
+        <button type="button" disabled={busy} onClick={remove}>{busy ? 'deleting…' : isLastDrink ? 'delete drink and shop' : 'delete drink'}</button>
       </div>}
       {error && <p role="alert">{error}</p>}
     </article>

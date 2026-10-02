@@ -65,6 +65,20 @@ export async function updateDrink(pool, id, draft) {
 }
 
 export async function deleteDrink(pool, id) {
-  const result = await pool.query('DELETE FROM drinks WHERE id=$1 RETURNING id', [id])
-  return result.rows.length > 0
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+    // Serialize deletions within a shop and coordinate with foreign-key inserts.
+    const parent = await client.query('SELECT c.id FROM cafes c JOIN drinks d ON d.cafe_id=c.id WHERE d.id=$1 FOR UPDATE OF c', [id])
+    if (!parent.rows.length) { await client.query('ROLLBACK'); return null }
+    const cafeId = parent.rows[0].id
+    const removed = await client.query('DELETE FROM drinks WHERE id=$1 RETURNING id', [id])
+    if (!removed.rows.length) { await client.query('ROLLBACK'); return null }
+    const cafe = await client.query('DELETE FROM cafes WHERE id=$1 AND NOT EXISTS (SELECT 1 FROM drinks WHERE cafe_id=$1) RETURNING id', [cafeId])
+    await client.query('COMMIT')
+    return { deletedDrinkId: id, deletedCafeId: cafe.rows[0]?.id ?? null }
+  } catch (error) {
+    await client.query('ROLLBACK')
+    throw error
+  } finally { client.release() }
 }

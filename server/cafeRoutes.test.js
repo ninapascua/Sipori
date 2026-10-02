@@ -9,7 +9,7 @@ import { registerCafeRoutes } from './cafeRoutes.js'
 async function withApi(query, check) {
   const app = express()
   app.use(express.json())
-  registerCafeRoutes(app, { query })
+  registerCafeRoutes(app, { query, connect: async () => ({ query, release() {} }) })
   app.use((error, request, response, next) => {
     response.status(500).json({ error: 'Something went wrong on the server' })
   })
@@ -112,6 +112,9 @@ test('drink edits validate input and save rating; deletion returns correct statu
   const draft = { name: 'Edited latte', type: 'matcha', rating: 5, price: 190, date: '2026-09-29', reorder: true, notes: 'Creamy' }
   const put = (base, body) => fetch(`${base}/api/drinks/drink-1`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
   await withApi(async (sql, values) => {
+    if (['BEGIN', 'COMMIT', 'ROLLBACK'].includes(sql)) return { rows: [] }
+    if (sql.startsWith('SELECT c.id')) return { rows: [{ id: 'cafe-1' }] }
+    if (sql.startsWith('DELETE FROM cafes')) return { rows: [{ id: 'cafe-1' }] }
     assert.equal(values[0], 'drink-1')
     if (sql.startsWith('UPDATE')) {
       assert.ok(sql.split('RETURNING')[0].includes('rating=$9'))
@@ -125,7 +128,9 @@ test('drink edits validate input and save rating; deletion returns correct statu
     const response = await put(base, draft)
     assert.equal(response.status, 200)
     assert.equal((await response.json()).rating, 5)
-    assert.equal((await fetch(`${base}/api/drinks/drink-1`, { method: 'DELETE' })).status, 204)
+    const deletion = await fetch(`${base}/api/drinks/drink-1`, { method: 'DELETE' })
+    assert.equal(deletion.status, 200)
+    assert.deepEqual(await deletion.json(), { deletedDrinkId: 'drink-1', deletedCafeId: 'cafe-1' })
   })
   await withApi(async () => { throw new Error('Invalid input must not reach storage') }, async base => {
     assert.equal((await put(base, { ...draft, price: -1 })).status, 400)
