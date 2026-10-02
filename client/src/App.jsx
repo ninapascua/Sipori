@@ -234,6 +234,8 @@ export default function App({ logoutControl }) {
       }} />}
       <footer className="site-footer">
         <span><img src={siporiWordmark} alt="Sipori" /></span>
+        <p className="footer-slogan">A little space for your sips</p>
+        <div className="footer-credit"><span>est. 2026</span><span>by Niña Pascua</span></div>
       </footer>
     </div>
   )
