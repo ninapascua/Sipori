@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { pool } from './db/pool.js'
 import { registerCafeRoutes } from './cafeRoutes.js'
+import { installAuth } from './auth.js'
 
 const app = express()
 
@@ -16,8 +17,16 @@ const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:5173')
   .map((origin) => origin.trim())
   .filter(Boolean)
 
-app.use(cors({ origin: allowedOrigins }))
+app.use(cors({ origin: allowedOrigins, credentials: true }))
 app.use(express.json({ limit: '4mb' }))
+
+installAuth(app, {
+  username: process.env.OWNER_USERNAME,
+  passwordHash: process.env.OWNER_PASSWORD_HASH,
+  origins: allowedOrigins,
+  production: process.env.NODE_ENV === 'production',
+  crossSite: process.env.AUTH_CROSS_SITE === 'true',
+})
 
 // Is the process alive?
 app.get('/healthz', (request, response) => {

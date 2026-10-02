@@ -19,6 +19,29 @@
 
 * { box-sizing: border-box; }
 
+.login-page { min-height: 100dvh; display: grid; place-items: center; padding: 48px 24px; overflow: hidden; }
+.login-scene { position: relative; width: min(100%, 520px); isolation: isolate; }
+.login-card { position: relative; width: 100%; padding: clamp(24px, 5vw, 40px); display: flex; flex-direction: column; background: #fffaf0; border: 1px solid var(--line); border-radius: 24px; box-shadow: 8px 8px 0 var(--card); }
+.login-star { position: absolute; width: clamp(64px, 13vw, 160px); height: auto; pointer-events: none; user-select: none; z-index: 1; }
+.login-star-left { left: 0; top: 28%; transform: translate(-90%, -50%); }
+.login-star-right { right: 0; top: 62%; transform: translate(90%, -50%); }
+@media (max-width: 760px) {
+  .login-page { padding-inline: 40px; }
+  .login-star-left { transform: translate(-88%, -50%); }
+  .login-star-right { transform: translate(88%, -50%); }
+}
+.login-wordmark { width: 160px; height: auto; align-self: center; margin-bottom: 24px; }
+.login-card h1 { font-size: 1.65rem; line-height: 1.25; }
+.login-card p { margin: 12px 0; }
+.login-card label { font-size: 1rem; margin: 14px 0 5px; }
+.login-card input { width: 100%; min-height: 44px; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font: inherit; }
+.login-card button { min-height: 46px; margin-top: 24px; border: 1px solid var(--accent); border-radius: 24px; background: var(--accent); color: var(--bg); font: inherit; cursor: pointer; }
+.login-card button:disabled { opacity: .65; cursor: wait; }
+.login-error { color: #8a2121; }
+.owner-session { display: flex; justify-content: flex-end; align-items: center; gap: 12px; padding: 8px 24px; }
+.owner-session button { color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 20px; padding: 6px 18px; font: inherit; cursor: pointer; }
+.owner-session p { margin: 0; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -182,27 +205,17 @@ button:disabled { opacity: .6; cursor: default; }
   border-radius: 24px;
   padding: 6px 40px 6px 16px;
 }
-/* A CSS magnifying glass keeps the placeholder free of emoji assets. */
-.search::before {
-  content: '';
+/* One SVG keeps the lens and handle aligned at every field size. */
+.search input { display: block; }
+.search-icon {
   position: absolute;
-  right: 17px;
-  top: 12px;
-  width: 11px;
-  height: 11px;
-  border: 2px solid var(--line);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.search::after {
-  content: '';
-  position: absolute;
-  right: 12px;
-  top: 25px;
-  width: 9px;
-  height: 2px;
-  background: var(--line);
-  transform: rotate(45deg);
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 60%;
+  max-height: 18px;
+  color: var(--fg);
   pointer-events: none;
 }
 .sr-only {
@@ -435,8 +448,6 @@ button:disabled { opacity: .6; cursor: default; }
 .page-heading h1 { font-size: 2rem; }
 .search { flex: 0 1 260px; }
 .search input { min-height: 17px; height: 17px; border-width: 1px; padding: 1px 24px 1px 9px; font-size: .55rem; }
-.search::before { right: 12px; top: 5px; width: 6px; height: 6px; border-width: 1px; }
-.search::after { right: 8px; top: 12px; width: 5px; height: 1px; }
 .cafe-grid { grid-template-columns: repeat(3, 74px); gap: 40px 46px; justify-content: start; }
 .cafe-card { width: 74px; padding: 4px; border-radius: 6px; }
 .cafe-card-image { aspect-ratio: 1.65; border-radius: 5px; padding: 3px; }
@@ -590,18 +601,6 @@ button:disabled { opacity: .6; cursor: default; }
     border: 1px solid var(--fg);
     border-radius: 999px;
     font-size: clamp(.65rem, 1.7vw, 1.2rem);
-  }
-  .search::before {
-    width: clamp(6px, 1vw, 14px);
-    height: clamp(6px, 1vw, 14px);
-    top: 50%;
-    right: clamp(12px, 2vw, 29px);
-    transform: translateY(-65%);
-  }
-  .search::after {
-    width: clamp(5px, .8vw, 12px);
-    top: 58%;
-    right: clamp(8px, 1.3vw, 19px);
   }
   .cafe-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -901,8 +900,6 @@ button:disabled { opacity: .6; cursor: default; }
   .page-heading { display: contents; }
   .search { grid-column: 1; grid-row: 1; width: 100%; margin: 0; }
   .search input { height: 36px; min-height: 36px; font-size: 16px; padding: 4px 32px 4px 12px; }
-  .search::before { width: 9px; height: 9px; right: 15px; top: 11px; }
-  .search::after { width: 6px; right: 10px; top: 22px; }
   .page-heading h1 { grid-column: 1 / -1; grid-row: 2; margin: 0; font-size: 2.8rem; }
   .add-cafe-card {
     position: relative;
@@ -1255,8 +1252,6 @@ body { overflow: hidden; }
   .drink-filters button { font-size: clamp(8px, 2.2vw, 11px); padding-inline: 4px; }
   .cafe-drink-search { left: 8px; top: 76px; width: calc(100% - 106px); }
   .cafe-drink-search input { height: 36px; min-height: 36px; border: 1.5px solid var(--fg); }
-  .cafe-drink-search::before { top: 11px; right: 15px; }
-  .cafe-drink-search::after { top: 22px; right: 10px; }
   .drink-card-scroll {
     margin: 0;
     padding: 14px 14px 32px;

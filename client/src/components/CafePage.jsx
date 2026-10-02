@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import DrinkDetail from './DrinkDetail.jsx'
+import SearchIcon from './SearchIcon.jsx'
 import AddDrinkButton from './AddDrinkButton.jsx'
 
 export default function CafePage({ cafe, drinks, status, error, onRetry, onAddDrink, onUpdateDrink, onDeleteDrink }) {
@@ -64,7 +65,7 @@ export default function CafePage({ cafe, drinks, status, error, onRetry, onAddDr
         <div className="drink-filters" role="group" aria-label="Filter drinks by type">
           {['all', 'matcha', 'hojicha'].map((item) => <button key={item} type="button" disabled={!!flip} aria-pressed={type === item} onClick={() => { setType(item); setSelectedId(null) }}>{item}</button>)}
         </div>
-        <label className="search cafe-drink-search"><span className="sr-only">Search drinks</span><input type="search" disabled={!!flip} value={search} onChange={(event) => { setSearch(event.target.value); setSelectedId(null) }} /></label>
+        <label className="search cafe-drink-search"><SearchIcon /><span className="sr-only">Search drinks</span><input type="search" disabled={!!flip} value={search} onChange={(event) => { setSearch(event.target.value); setSelectedId(null) }} /></label>
       </header>
       <div ref={scrollRegion} className={`drink-card-scroll${flip ? ` drink-flip-${flip.phase} drink-flip-${flip.opening ? 'forward' : 'back'}` : ''}`} tabIndex={0} role="region" aria-label="Cafe drinks">
         {status === 'loading' && <p role="status">Loading café...</p>}

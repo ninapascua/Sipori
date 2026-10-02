@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listCafes, listDrinks, createCafeWithDrink, createDrink, updateDrink, deleteDrink } from './api'
 import Scrapbook from './components/Scrapbook.jsx'
+import SearchIcon from './components/SearchIcon.jsx'
 import CafePage from './components/CafePage.jsx'
 import DemoNotice from './components/DemoNotice.jsx'
 import AddShopButton from './components/AddShopButton.jsx'
@@ -129,6 +130,7 @@ export default function App() {
           <h1>Cafés</h1>
 
           <label className="search">
+            <SearchIcon />
             <span className="sr-only">Search cafés</span>
             <input
               type="search"

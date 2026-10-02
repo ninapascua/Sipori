@@ -7,11 +7,15 @@ const BASE = import.meta.env.VITE_API_BASE_URL || ''
 
 async function request(path, options) {
   const response = await fetch(`${BASE}${path}`, {
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     ...options,
   })
 
   if (!response.ok) {
+    if (response.status === 401 && !path.startsWith('/api/auth/')) {
+      window.dispatchEvent(new Event('sipori:unauthorized'))
+    }
     // Try to use the API's own message; fall back to the status line.
     let message = `${response.status} ${response.statusText}`
     try {
@@ -25,6 +29,10 @@ async function request(path, options) {
 
   return response.status === 204 ? null : response.json()
 }
+
+export const getSession = () => request('/api/auth/session')
+export const login = (username, password) => request('/api/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) })
+export const logout = () => request('/api/auth/logout', { method: 'POST' })
 
 export const listCafes = () =>
   request('/api/cafes')

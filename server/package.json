@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "auth:setup": "node setup-auth.js",
     "test": "node --test",
     "start": "node server.js",
     "dev": "node --env-file=.env --watch server.js",
