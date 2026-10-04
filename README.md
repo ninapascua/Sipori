@@ -1,137 +1,202 @@
-# Sipori
+﻿# Sipori
 
-> **Replace this whole file.** It is a worked example of the README your project
-> will be graded from, not a file to leave as it is. Start with
-> [START-HERE.md](START-HERE.md).
+*A little space for your sips.*
 
-Sipori is a personal log for discovering, rating, and keeping track of matcha and hojicha drinks.
+Sipori is a private cafe journal for a single owner to record, rate, and look back on matcha and hojicha drinks.
 
-**Live site:** https://yourusername.github.io/your-repo-name/
-**API:** https://your-api.onrender.com/healthz
-**Demo video:** (link)
+**Live site:** [sipori.onrender.com](https://sipori.onrender.com/#/)
 
-> **Owner login is required.** Configure your single account with `npm run auth:setup`
-> in `server`. See [Owner login](docs/owner-login.md) for setup and deployment.
+**API:** [Backend health check](https://sipori-api.onrender.com/healthz)
 
-![A screenshot of the main screen](docs/assets/screenshot.png)
+**Demo video:** Not yet available.
+
+Live mode requires owner login. Demo mode opens a separate browser-only sample journal without login. There is no public registration or default password. Configure your own credentials with `npm run auth:setup` in `server/`.
+
+**Screenshot:** To be added. The repository does not yet contain a screenshot of the main screen.
 
 ## What it does
 
-- Keep a personal log of cafés and the matcha or hojicha drinks tried at each one
-- Record drink details including type, price, rating, reorder choice, notes and date
-- Browse cafés and see the number of drinks logged and their average rating
-- Search for cafés and filter drinks by matcha or hojicha
-- Look back on past drinks through a monthly scrapbook
+- Create a cafe together with its first drink, with optional cafe and drink photos, then add more drinks to that cafe.
+- Record a drink's matcha or hojicha type, price, optional 1–5 star rating, reorder choice, notes, and date.
+- Search cafes by name and drinks by name within a cafe. Filter drinks by matcha or hojicha, and view each cafe's drink count and average based on rated drinks.
+- Open, edit, and delete drink entries. Deleting a cafe's last drink also deletes the cafe after a warning and confirmation.
+- Display up to ten drink photos from the current month in a scrapbook, with a shuffle control.
+- Use responsive layouts for desktop and phone screens, with a private owner login and logout.
 
 ## Built with
 
-React and Vite on the front end, Express and PostgreSQL on the back end. The
-client is on GitHub Pages, the API on (host), the database on (host).
+React and Vite on the frontend, Express on Node.js for the API, and PostgreSQL for storage. The frontend and backend are configured as separate services on Render, and the database is hosted on Supabase. A GitHub Pages frontend workflow is also included in the repository.
+
+## Demo mode
+
+Demo mode is a fallback for showing the interface when the API is unavailable. It uses sample cafe/drink records and saves changes in your browser's localStorage. It requires no server, database, or owner login, and displays a visible demo notice.
+
+| `VITE_USE_MOCK_API` | What happens |
+| --- | --- |
+| `true` | Browser-only demo: sample data and localStorage, independent of the private journal. |
+| `false` or unset | Live mode: owner login and the Express/PostgreSQL API. |
+
+The switch is chosen at build time. An API error in live mode shows an error; it does not automatically switch data sources. To use the fallback, build or run with `VITE_USE_MOCK_API=true`. Demo changes stay in that browser and are never synced to the live database. Clear the site's browser storage to reset its sample journal.
+
+GitHub Pages serves frontend files only; the live API and database must run separately.
 
 ## Running it yourself
 
-Sipori requires the real Express API and PostgreSQL. The previous browser-only
-mock mode is disabled, even if `VITE_USE_MOCK_API` is still present in an old file.
+Install Node.js with npm and have a local or hosted PostgreSQL database available. Use a currently supported Node.js release compatible with the project's Node 20-or-later requirement. The commands below use PowerShell and start from the repository root.
 
-1. Copy `server/.env.example` to `server/.env` and configure `DATABASE_URL`.
-2. In `server`, run `npm install`, `npm run auth:setup`, then `npm run db:schema`.
-3. Start the API with `npm run dev`.
-4. In `client`, run `npm install`, copy `.env.example` to `.env` if needed,
-   and run `npm run dev`.
-5. Open the frontend and log in with your chosen credentials.
+For the browser-only demo, run these commands from the repository root:
 
-The API refuses to start without owner credentials. Read
-[Owner login](docs/owner-login.md) for cookie settings and deployment requirements.
+```powershell
+cd client
+npm ci
+# For a fresh checkout only; keep an existing .env.
+Copy-Item .env.example .env
+# Set VITE_USE_MOCK_API=true in client/.env.
+npm run dev
+```
+
+Open `http://localhost:5173`. For the full live stack, set `VITE_USE_MOCK_API=false` and follow the steps below.
+
+**1. Configure the backend.** For a fresh checkout:
+
+```powershell
+cd server
+npm ci
+Copy-Item .env.example .env
+```
+
+Edit `server/.env` and set `DATABASE_URL` to your PostgreSQL connection string. Keep `NODE_ENV=development` and `CORS_ORIGINS=http://localhost:5173` for local use. If you already have an `.env`, keep it rather than overwriting it with the example.
+
+**2. Set your owner login, apply the schema, and start the API.**
+
+```powershell
+npm run auth:setup
+npm run db:schema
+npm run dev
+```
+
+The setup command asks for a username and a password of at least 12 characters and stores a salted scrypt password hash in `server/.env`. The schema command creates or updates the required tables without seeding sample journal entries. Run `npm run db:seed` separately if you want sample cafe/drink records in a development database. The API normally runs at `http://localhost:3000`.
+
+**3. Start the frontend in a second terminal, from the repository root.**
+
+```powershell
+cd client
+npm ci
+Copy-Item .env.example .env
+npm run dev
+```
+
+Keep an existing `client/.env` if it is already configured. A blank `VITE_API_BASE_URL` uses Vite's local `/api` proxy to the backend. Open `http://localhost:5173` and log in with the credentials you created.
+
+**4. Check the API and project.** From the repository root:
+
+```powershell
+curl.exe http://localhost:3000/healthz
+curl.exe http://localhost:3000/readyz
+npm test --prefix server
+npm run build --prefix client
+```
+
+`/healthz` checks the API process; `/readyz` checks database connectivity. Data endpoints such as `/api/cafes` require an authenticated session and return HTTP 401 when accessed without one.
 
 ## Environment variables
 
-None of these are committed. `.env.example` in each folder lists them with
-placeholder values.
+Local `.env` files are ignored by Git. The example files contain setup guidance; configure production values directly on the host.
 
-| Name | Where | What it is |
+| Name | Where | Purpose |
 | --- | --- | --- |
-| `DATABASE_URL` | server | PostgreSQL connection string. Contains a password |
-| `CORS_ORIGINS` | server | comma-separated origins allowed to call the API |
-| `NODE_ENV` | server | `production` on your host |
-| `PORT` | server | **set by the host**, do not set it yourself |
-| `OWNER_USERNAME` | server | single owner username |
-| `OWNER_PASSWORD_HASH` | server | salted hash generated by `npm run auth:setup` |
-| `AUTH_CROSS_SITE` | server | `true` only for cross-site HTTPS deployments |
-| `VITE_API_BASE_URL` | client, at build time | your API's public URL, no trailing slash |
+| `DATABASE_URL` | Server | PostgreSQL connection string; contains credentials. |
+| `DATABASE_SSL` | Server | Optional TLS switch; `false` is for a private local database without TLS. |
+| `CORS_ORIGINS` | Server | Comma-separated allowed frontend origins, without paths or trailing slashes. |
+| `OWNER_USERNAME` | Server | The single owner's username. |
+| `OWNER_PASSWORD_HASH` | Server | Salted scrypt hash generated by `npm run auth:setup`. |
+| `NODE_ENV` | Server | `development` locally; `production` on the host. |
+| `AUTH_CROSS_SITE` | Server | `true` for cross-site HTTPS frontend/API deployments; `false` locally. |
+| `PORT` | Server | Supplied by the hosting platform; defaults to 3000 locally. |
+| `VITE_USE_MOCK_API` | Client, build time | Exact `true` enables demo mode; `false` or unset uses the live API. |
+| VITE_API_BASE_URL | Client, build time | Public API base URL; blank uses the same origin. |
+| `VITE_BASE_PATH` | Client, build time | `/` for Render; the repository path for GitHub project Pages. |
 
-Every `VITE_` value is compiled into the built JavaScript and is **public**.
-Never put a key, a password or a connection string in one.
+Every `VITE_` value is public in the built frontend. Never place passwords, password hashes, or database connection strings there.
 
 ## Deploying
 
-**Client, to GitHub Pages.** Already wired up in
-`.github/workflows/deploy-pages.yml`. Two one-time steps:
+**Same-origin option for iPhone login:** the API can now serve the built frontend too. This change is prepared locally and still needs deployment. Use the API's Render Web Service with a blank Root Directory, build command `npm ci --prefix server && npm ci --prefix client --include=dev && npm run build --prefix client`, and start command `npm start --prefix server`. Set `VITE_USE_MOCK_API=false`, `VITE_BASE_PATH=/`, remove or empty `VITE_API_BASE_URL`, set `AUTH_CROSS_SITE=false`, and allow the combined service origin in `CORS_ORIGINS`. Keep existing database and owner credentials. Deploy, then use that Web Service URL for both the website and API. After deployment, test login, journal operations, and logout on PC and iPhone using the combined service URL.
 
-1. **Settings > Pages > Build and deployment > Source: GitHub Actions.** Without
-   this the workflow goes green and publishes nothing.
-2. Set `VITE_API_BASE_URL` under **Settings > Secrets and variables > Actions >
-   Variables** to your configured API, then re-run the workflow. Follow the
-   cross-site cookie instructions in [Owner login](docs/owner-login.md).
 
-The repository must be **public** for Pages to serve it on a free account.
+**Backend on Render:** create a Node Web Service connected to this repository. Leave the root directory blank so the service can access both `server/` and `shared/`.
 
-**API and database.** Not automated here, because most hosts deploy straight from
-your repository with no workflow at all. Keep the repository root available:
-the API imports validation from `shared/`. Build with `npm ci --prefix server`
-and start with `npm start --prefix server`, or build the root Docker context
-with `server/Dockerfile`. Set the environment variables in the host dashboard,
-and run `server/db/schema.sql` once against the hosted database.
+| Setting | Value |
+| --- | --- |
+| Build command | `npm ci --prefix server` |
+| Start command | `npm start --prefix server` |
+| Health check path | `/healthz` |
+
+Set the server environment variables in Render. Use `NODE_ENV=production`, the real database connection and owner settings, and the exact frontend origin in `CORS_ORIGINS`. Apply `server/db/schema.sql` to a new database before use. Keep the API on one instance while sessions and rate limits are stored in memory.
+
+For a separate demo fallback deployment, set `VITE_USE_MOCK_API=true` on the frontend and rebuild. Keep the live frontend set to `false`.
+
+**Frontend on Render:** create a Static Site connected to the same repository, with the root directory left blank.
+
+| Setting | Value |
+| --- | --- |
+| Build command | `npm ci --prefix client && npm run build --prefix client` |
+| Publish directory | `client/dist` |
+| `VITE_USE_MOCK_API` | `false` for live mode; `true` for a demo fallback deployment |
+| VITE_API_BASE_URL | The HTTPS backend URL, without a trailing slash |
+| `VITE_BASE_PATH` | `/` |
+
+After Render assigns the frontend URL, update the backend's `CORS_ORIGINS` to match. Set `AUTH_CROSS_SITE=true` when the frontend and API are on different sites. Rebuild the frontend after changing its build-time environment variables, and redeploy the backend after changing its configuration. Test login, logout, and journal operations on the live frontend.
+
+**Alternative frontend on GitHub Pages:** the workflow is in [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml). Select GitHub Actions as the Pages source, add `VITE_API_BASE_URL` as a repository Actions variable, and run the workflow. It sets the repository base path automatically. Update the backend's allowed origin to the GitHub Pages origin, without the repository path. Set the repository variable `VITE_USE_MOCK_API=true` to publish the demo fallback, or `false` for live mode, then rebuild. This workflow deploys only the frontend.
 
 ## Project structure
 
-    client/          React front end, built by Vite
-      src/api/       authenticated HTTP API (legacy mock files are unused)
-      src/components/
-    server/          Express API
-      db/            pool, schema.sql, seed.sql, and a runner for them
-    compose.yml      only if you self-host
-    docs/            your planning documents and weekly reports
+```text
+client/
+  src/App.jsx             Main screens and application state
+  src/api/                Live HTTP client and browser-only demo API
+  src/components/         Login, cafe forms, drink details, and scrapbook
+  src/assets/             Project artwork
+  src/styles.css          Theme and responsive layouts
+  public/                 Static public files
+server/
+  auth.js                 Owner login, sessions, and rate limiting
+  setup-auth.js           Local credential setup
+  cafeRoutes.js           Cafe and drink endpoints
+  cafesRepo.js            Parameterized queries and transactions
+  db/                     Connection pool, schema, and database scripts
+  *.test.js               Backend tests
+shared/cafeDraft.mjs       Cafe and drink validation
+.github/workflows/        GitHub Pages frontend deployment
+docs/                     Planning, progress, and security documentation
+AI-USAGE.md               AI assistance record
+```
 
 ## Architecture
 
-Three or four sentences, or a small diagram. Which piece talks to which, and
-where each one is hosted.
+The browser loads the React frontend from Render and sends requests to the Express API, hosted separately on Render, using an HttpOnly session cookie. Express authenticates requests, validates incoming entries, and accesses the Supabase-hosted PostgreSQL database through `pg` and parameterized queries. Creating a cafe with its first drink and deleting a cafe's last drink use transactions so the related changes succeed or roll back together. Database credentials and password verification remain on the server; sessions expire after 12 hours and are revoked on logout or a new login.
 
 ## What I would do next
 
-Three honest bullets. This paragraph is worth more than it looks.
+- Persist sessions and rate limits in a shared store so backend restarts do not discard them.
+- Use same-site frontend/API hosting and add browser-level tests for login, mobile layouts, and journal operations, including cookie restrictions.
 
 ## Author
 
-Your name, and a link. Course and section.
+[ninapascua](https://github.com/ninapascua)
+
 
 ## AI use
 
-If you used AI while building this, say so here. Honest disclosure is the
-standard in this course and increasingly outside it, and reporting heavy use
-accurately costs you nothing.
+[![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)](AI-USAGE.md)
 
-This section is the last 10 points of the finals badge, and it wants three
-things:
-
-![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
-
-- the badge above, or one you like better
-- a line naming which assistant you used and how much of the work it touched
-- a link to [AI-USAGE.md](AI-USAGE.md), where the full account lives
-
-Keep the detail in `AI-USAGE.md` rather than here. This section is the summary a
-visitor reads; that file is the record the badge is graded from.
+ChatGPT and Codex (OpenAI) were used substantially for implementation, troubleshooting, code review, tests, and deployment guidance across the frontend and backend. I supplied the concept, wireframes, visual direction, and requirements, and worked on revisions and testing. See [AI-USAGE.md](AI-USAGE.md) for the detailed record and commit references.
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). Put your own name in it.
+MIT. See [LICENSE](LICENSE).
 
-### Cafe creation
 
-The Add Shop modal collects cafe details and requires the first drink before saving.
-The authenticated API uses
-`POST /api/cafes` with `{ cafe, drink }` and a database transaction.
-Before using this with an existing PostgreSQL database, run `npm run db:schema`
-from `server` to add cafe image storage and allow drinks to remain unrated.
-Images are optional; ratings are not collected by this form.
+
+

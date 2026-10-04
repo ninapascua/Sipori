@@ -3,7 +3,6 @@ import { listCafes, listDrinks, createCafeWithDrink, createDrink, updateDrink, d
 import Scrapbook from './components/Scrapbook.jsx'
 import SearchIcon from './components/SearchIcon.jsx'
 import CafePage from './components/CafePage.jsx'
-import DemoNotice from './components/DemoNotice.jsx'
 import AddShopButton from './components/AddShopButton.jsx'
 import AddCafeModal from './components/AddCafeModal.jsx'
 import siporiMark from './assets/sipori-mark.png'
@@ -123,8 +122,6 @@ export default function App({ logoutControl }) {
           {logoutControl}
         </nav>
       </header>
-
-      <DemoNotice />
 
       {scrapbookRoute ? <Scrapbook drinks={drinks} status={status} error={error} onRetry={load} /> : cafeRoute ? <CafePage key={route} cafe={selectedCafe} drinks={selectedCafe ? getCafeDrinks(selectedCafe.id) : []} status={status} error={error} onRetry={load} onAddDrink={() => setAddingDrink(true)} onUpdateDrink={async (id, draft) => { const saved = await updateDrink(id, draft); setDrinks((current) => current.map((drink) => drink.id === id ? saved : drink)) }} onDeleteDrink={async (id) => { const result = await deleteDrink(id); setDrinks((current) => current.filter((drink) => drink.id !== id)); if (result?.deletedCafeId) { setCafes((current) => current.filter((cafe) => cafe.id !== result.deletedCafeId)); window.location.hash = '#/' } }} /> : <main className="main-content">
         <section className="page-heading">

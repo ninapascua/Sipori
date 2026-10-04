@@ -4,6 +4,7 @@ import { pool } from './db/pool.js'
 import { registerCafeRoutes } from './cafeRoutes.js'
 import { installAuth } from './auth.js'
 import { errorHandler } from './errorHandler.js'
+import { serveFrontend } from './frontend.js'
 
 const app = express()
 
@@ -47,6 +48,7 @@ app.get('/readyz', async (request, response) => {
 })
 
 registerCafeRoutes(app, pool)
+serveFrontend(app)
 
 app.use((request, response) => {
   response.status(404).json({ error: 'No such route' })

@@ -112,8 +112,7 @@ button {
 
 button:disabled { opacity: .6; cursor: default; }
 
-/* Never remove a focus outline without replacing it. Keyboard users need to
-   see where they are, and it is checked. */
+
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .list { list-style: none; padding: 0; margin: 0; }
@@ -208,7 +207,7 @@ button:disabled { opacity: .6; cursor: default; }
   border-radius: 24px;
   padding: 6px 40px 6px 16px;
 }
-/* One SVG keeps the lens and handle aligned at every field size. */
+
 .search input { display: block; }
 .search-icon {
   position: absolute;
@@ -328,9 +327,7 @@ button:disabled { opacity: .6; cursor: default; }
   .cafe-grid { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 20px; }
   .status-message, .main-content > .error { grid-column: 1 / -1; }
 }
-/* High-fidelity theme from the supplied Home/Shops artwork. The responsive
-   wireframe rules above still define the layout; these rules apply the brand.
-   Fonts load through Google Fonts in index.html, with local serif fallbacks. */
+
 .logo, .site-footer > span { border: 0; background: transparent; padding: 0; }
 .logo { width: 84px; min-width: 84px; min-height: 84px; }
 .logo img { display: block; width: 84px; height: 84px; object-fit: contain; }
@@ -363,7 +360,6 @@ button:disabled { opacity: .6; cursor: default; }
   padding: 9px;
   box-shadow: 0 3px 3px #350b0c40;
 }
-/* The supplied cafe image is decorative sample art, not a photo of each shop. */
 .cafe-card-image {
   border: 0;
   border-radius: 8px;
@@ -390,7 +386,7 @@ button:disabled { opacity: .6; cursor: default; }
   font-size: 1.1rem;
   text-transform: lowercase;
 }
-/* Uploaded star artwork stays decorative so the button retains its focus outline. */
+
 .add-cafe-card::before {
   content: '';
   position: absolute;
@@ -433,7 +429,7 @@ button:disabled { opacity: .6; cursor: default; }
 
 /* Final reference composition. The cards remain driven by the API data; these
    measurements only control the visual density of the supplied artwork. */
-.demo-notice { display: none; }
+.demo-notice { display: block; }
 .logo .logo-mark { display: block; }
 .logo .logo-wordmark { display: none; }
 .app { padding: 21px clamp(20px, 6.4vw, 75px) 8px; }
@@ -546,7 +542,6 @@ button:disabled { opacity: .6; cursor: default; }
   .add-cafe-card::after { inset: 8px 7px; }
 }
 
-/* The reference places the cropped star flush against the desktop canvas edge. */
 @media (min-width: 600px) {
   .main-content { position: relative; }
   .add-cafe-card {
@@ -631,7 +626,7 @@ button:disabled { opacity: .6; cursor: default; }
   .cafe-card-content p { margin: clamp(2px, .33vw, 5px) 0; white-space: normal; }
 }
 
-/* Keep navigation in proportion to the reference artwork and desktop cards. */
+
 @media (min-width: 600px) {
   .app { padding-top: clamp(12px, 2vw, 29px); }
   .site-header { gap: 0; min-height: clamp(31px, 5.1vw, 74px); }
@@ -678,7 +673,6 @@ button:disabled { opacity: .6; cursor: default; }
   }
 }
 
-/* The footer wordmark is about 30px wide on the 603px reference canvas. */
 .site-footer > span,
 .site-footer img {
   width: clamp(30px, 5vw, 73px);
@@ -687,11 +681,9 @@ button:disabled { opacity: .6; cursor: default; }
   min-height: 0;
 }
 
-/* Transparent pixels do not advertise the star's hover state. */
 .add-cafe-card { cursor: default; }
 .add-cafe-card.is-over-star { cursor: pointer; }
 
-/* Keep additional shops inside a keyboard-scrollable panel beside Add shop. */
 .cafe-scroll {
   grid-column: 1;
   min-width: 0;
@@ -735,13 +727,11 @@ button:disabled { opacity: .6; cursor: default; }
   .cafe-scroll .cafe-grid { margin-top: 0; }
 }
 
-/* A soft focus shadow keeps the search field's single border clear. */
 .search input:focus {
   outline: none;
   box-shadow: 0 2px 8px #350b0c40;
 }
 
-/* Full-canvas star modal from the Add Caf? reference. */
 .add-cafe-modal {
   position: fixed;
   inset: 0;
@@ -833,7 +823,6 @@ button:disabled { opacity: .6; cursor: default; }
   .cafe-form-actions { padding-right: 0; justify-content: center; }
 }
 
-/* Responsive canvas: the star reaches the viewport edge, not a capped wrapper. */
 .app {
   --page-gutter: clamp(20px, 5.3vw, 120px);
   max-width: none;
@@ -893,7 +882,7 @@ button:disabled { opacity: .6; cursor: default; }
 @media (max-width: 599px) {
   .cafe-card-image h2.cafe-name-long { font-size: clamp(.8rem, 3.4vw, 1.15rem); }
 }
-/* Tablets retain the three-column arrangement with readable card content. */
+
 @media (min-width: 600px) and (max-width: 1000px) {
   .main-content { padding-left: 2vw; grid-template-columns: minmax(0, 60vw) minmax(0, 1fr); }
   .cafe-scroll .cafe-grid { column-gap: 3vw; }
@@ -953,7 +942,7 @@ button:disabled { opacity: .6; cursor: default; }
   .site-footer > span, .site-footer img { width: 52px; }
 }
 
-/* Let the card panel absorb height changes instead of scrolling the page. */
+
 html, body, #root { height: 100%; }
 body { overflow: hidden; }
 .app { height: 100dvh; min-height: 0; overflow: hidden; }
@@ -987,7 +976,6 @@ body { overflow: hidden; }
   .page-heading h1 { font-size: clamp(2rem, 6dvh, 2.8rem); }
 }
 
-/* Fade the page behind a gently expanding star, then reverse on dismissal. */
 .add-cafe-modal[open] { animation: cafe-modal-in 300ms ease-out both; }
 .add-cafe-modal[open]::backdrop { animation: cafe-backdrop-in 300ms ease-out both; }
 .add-cafe-modal[open] .add-cafe-scene {
@@ -1009,7 +997,6 @@ body { overflow: hidden; }
   .add-cafe-modal[open] .add-cafe-scene { animation: none; }
 }
 
-/* The first drink is the second step of the same creation dialog. */
 .add-cafe-modal[open] .add-cafe-scene.is-leaving {
   animation: cafe-step-out 180ms ease-in both;
   pointer-events: none;
@@ -1059,18 +1046,16 @@ body { overflow: hidden; }
   .drink-form-heading { gap: 10px; }
 }
 
-/* Use the saved shop photo, with the supplied artwork as the image fallback. */
+
 .cafe-card-image { position: relative; isolation: isolate; overflow: hidden; background: var(--pink); }
 .cafe-card-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
 .cafe-card-image::after { content: ''; position: absolute; inset: 0; background: #fbc1c840; z-index: -1; pointer-events: none; }
 
-/* Slight optical adjustment to center the label within the star. */
 @media (min-width: 600px) {
   .add-cafe-card .add-icon { top: 43%; }
   .add-cafe-card > span:last-child { top: 53%; }
 }
 
-/* Cafe journal: an inset frame and a star extending from the left edge. */
 .cafe-card-link { display: block; color: inherit; text-decoration: none; border-radius: inherit; }
 .cafe-card { transition: box-shadow 180ms ease; }
 .cafe-card:hover, .cafe-card:focus-within { box-shadow: 0 5px 10px #350b0c55; }
@@ -1146,7 +1131,6 @@ body { overflow: hidden; }
   .add-cafe-card > span { top: -2px; }
 }
 
-/* A selected sip opens as a full-width journal entry. */
 .drink-detail-card { position: relative; isolation: isolate; }
 .drink-detail-flip { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; border-radius: inherit; background: transparent; z-index: 1; }
 .drink-detail-actions, .drink-delete-confirm { position: relative; z-index: 2; }
@@ -1177,7 +1161,6 @@ body { overflow: hidden; }
   .drink-detail-actions { gap: 12px; }
 }
 
-/* Turn the chosen card over, then reveal its journal entry. */
 .drink-card-scroll:is(.drink-flip-in, .drink-flip-out),
 .drink-card-scroll:is(.drink-flip-in, .drink-flip-out) .drink-card-grid { perspective: 1400px; }
 .drink-flip-out .drink-flip-target,
@@ -1223,7 +1206,7 @@ body { overflow: hidden; }
 .drink-rating-stars { display: flex; flex-wrap: wrap; gap: 4px; }
 .drink-rating-stars button { margin: 0; padding: 0 3px; min-width: 30px; min-height: 36px; border: 0; background: transparent; color: var(--fg); font-size: 28px; line-height: 1; }
 .drink-rating-stars button:hover { color: var(--accent); transform: scale(1.1); }
-/* Phone artwork: cropped button stars and a full-screen cafe form. */
+
 @media (max-width: 599px) {
   .add-cafe-card {
     justify-self: end;
@@ -1258,7 +1241,6 @@ body { overflow: hidden; }
   .add-cafe-form .cafe-form-actions { justify-content: center; padding: 0; margin-top: 42px; }
 }
 
-/* Phone cafe journal: heading above the inset, independently scrolling cards. */
 @media (max-width: 599px) {
   .cafe-detail { padding: clamp(124px, 19dvh, 150px) 8px 28px; }
   .cafe-detail-panel { border: 0; border-radius: 0; box-shadow: none; padding: 0; }
@@ -1289,7 +1271,6 @@ body { overflow: hidden; }
   .drink-log-notes { margin: 0 4px 7px; font-size: clamp(7px, 2vw, 10px); line-height: 1.4; }
 }
 
-/* Monthly scrapbook: uploaded photos tucked into scattered paper frames. */
 .scrapbook { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; position: relative; }
 .scrapbook-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 20px; padding: 8px 0; }
 .scrapbook-month { color: var(--fg); font-family: 'Luxurious Script', cursive; font-size: clamp(22px, 2.5vw, 36px); }
@@ -1318,7 +1299,6 @@ body { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) { .scrapbook-photo { transition: none; } }
 
-/* Botanical stickers from the supplied scrapbook assets 11?15. */
 .scrapbook-decorations { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
 .scrapbook-sticker { position: absolute; object-fit: contain; }
 .scrapbook-leaves { left: -3%; top: 5%; width: 23%; height: 46%; transform: rotate(25deg); }
@@ -1337,7 +1317,6 @@ body { overflow: hidden; }
   .scrapbook-butterfly { width: 25%; height: 150px; }
 }
 
-/* Full-bleed collage edges echo the original scrapbook composition. */
 .scrapbook { margin-inline: calc(-1 * var(--page-gutter)); }
 .scrapbook-toolbar { padding-inline: var(--page-gutter); }
 .scrapbook-leaves { left: -5%; top: 5%; width: 22%; height: 49%; transform: rotate(31deg); }
@@ -1361,7 +1340,6 @@ body { overflow: hidden; }
   .scrapbook-butterfly { right: 0; width: 25%; height: 150px; }
 }
 
-/* Phone scrapbook reference: an open paper canvas framed by edge stickers. */
 @media (max-width: 599px) {
   .app:has(.scrapbook) .site-header {
     min-height: 76px;
@@ -1401,7 +1379,6 @@ body { overflow: hidden; }
   }
 }
 
-/* Keep content readable when the viewport or text size changes. */
 .main-content, .cafe-detail, .cafe-detail-panel, .page-heading,
 .drink-card-scroll, .drink-log-card, .drink-detail-card { min-width: 0; }
 .drink-log-notes, .drink-detail-notes, .cafe-card-content { overflow-wrap: anywhere; }
@@ -1454,7 +1431,6 @@ body { overflow: hidden; }
   .drink-detail-columns dl > div { grid-template-columns: 52px minmax(0, 1fr); gap: 8px; }
 }
 
-/* Short landscape windows scroll the journals without trapping content. */
 @media (max-height: 540px) {
   .app:not(:has(.scrapbook)) { overflow-y: auto; }
   .app:not(:has(.scrapbook)) .main-content { flex: 0 0 auto; min-height: 420px; }

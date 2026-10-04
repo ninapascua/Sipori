@@ -7,7 +7,7 @@ import decor12 from '../assets/scrapbook-12.png'
 import decor13 from '../assets/scrapbook-13.png'
 import decor14 from '../assets/scrapbook-14.png'
 import decor15 from '../assets/scrapbook-15.png'
-import { selectMonthlyPhotos } from '../scrapbook.mjs'
+import { selectMonthlyPhotos } from '../scrapbook.js'
 
 const placements = [
   [14, 5, 11, -10], [26, 13, 21, 13], [53, 19, 13, -1],

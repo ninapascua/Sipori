@@ -1,4 +1,4 @@
-import pg from 'pg'
+﻿import pg from 'pg'
 
 // Fail at boot with one clear line, rather than with a mystery 500 an hour
 // later. The commonest deployment mistake is setting a variable in .env on your
@@ -11,10 +11,7 @@ if (!process.env.DATABASE_URL) {
   process.exit(1)
 }
 
-// Preserve the existing remote TLS setting until the host's CA is configured.
-// Traffic is encrypted, but the server certificate is not verified. The current
-// connection fails with SELF_SIGNED_CERT_IN_CHAIN when verification is enabled.
-// Local/private databases can explicitly disable TLS (e.g. the Compose service).
+// Remote connections use TLS by default; private local databases can disable it.
 const isLocal = ['localhost', '127.0.0.1', '[::1]'].includes(new URL(process.env.DATABASE_URL).hostname)
 const useSsl = process.env.DATABASE_SSL === 'false' ? false : process.env.DATABASE_SSL === 'true' || !isLocal
 
@@ -31,3 +28,4 @@ export const pool = new pg.Pool({
 pool.on('error', (error) => {
   console.error('Unexpected database pool error:', error.message)
 })
+

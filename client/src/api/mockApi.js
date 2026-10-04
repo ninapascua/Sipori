@@ -32,14 +32,8 @@ function read() {
   if (stored) {
     try {
       const data = JSON.parse(stored)
-      // Add new demo shops to existing browsers without replacing saved entries.
-      const existingIds = new Set(data.cafes.map((cafe) => cafe.id))
-      const addedCafes = seed.cafes.filter((cafe) => !existingIds.has(cafe.id))
-      const addedSamples = addTokyoSamples(data)
-      if (addedCafes.length > 0 || addedSamples) {
-        data.cafes.push(...addedCafes)
-        write(data)
-      }
+      // Seed only fresh storage so deleted sample shops stay deleted.
+      if (!Array.isArray(data.cafes) || !Array.isArray(data.drinks)) throw new Error('Invalid demo storage')
       return data
     } catch {
       // Corrupted storage. Start again rather than crashing the app.
@@ -147,7 +141,11 @@ export async function updateDrink(id, payload) {
 export async function deleteDrink(id) {
   await delay()
   const data = structuredClone(read())
-  if (!data.drinks.some((drink) => drink.id === id)) throw new Error('Drink not found')
+  const drink = data.drinks.find((item) => item.id === id)
+  if (!drink) throw new Error('Drink not found')
   data.drinks = data.drinks.filter((drink) => drink.id !== id)
-  write(data)
+  const deletedCafeId = data.drinks.some((item) => item.cafeId === drink.cafeId) ? null : drink.cafeId
+  if (deletedCafeId) data.cafes = data.cafes.filter((cafe) => cafe.id !== deletedCafeId)
+  try { write(data) } catch { throw new Error('Could not save. Browser storage may be full.') }
+  return { deletedDrinkId: id, deletedCafeId }
 }
