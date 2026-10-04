@@ -1,15 +1,14 @@
 ﻿# AI usage
 
-Sipori was built with substantial AI assistance using ChatGPT and Codex (OpenAI).
+Sipori was built with AI assistance using ChatGPT and Codex (OpenAI).
 AI helped write and revise frontend components, CSS, backend authentication,
 validation, tests, and deployment configuration. I directed the product and visual
-choices, requested revisions, and carried out the hosting setup. This is not a
-claim that I independently wrote every file committed under my GitHub account.
+choices, requested revisions, and carried out the hosting setup.
 
 
 ## 1. How I used AI
 
-### 2026-09-23 â€” Initial project setup
+### 2026-09-23 - Initial project setup
 
 - **Tool:** ChatGPT (OpenAI).
 - **What I asked for:** I shared my existing Sipori project plan, design decisions, course requirements, and the provided final project template. I asked for help organizing the initial development steps.
@@ -41,7 +40,7 @@ claim that I independently wrote every file committed under my GitHub account.
 - **What I kept, what I changed, and why:** I used the feedback to guide my own revisions and worked with AI on issues I could not fix independently. The aim was to preserve my intended design while making the frontend more reliable and responsive.
 - **Commit:** [Finalized the frontend and responsiveness](https://github.com/ninapascua/Sipori/commit/78d5324a6b3d77233c1c1888492fce908389024f).
 
-### 2026-10-02 â€” Single-owner login
+### 2026-10-02 - Single-owner login
 
 - **Tool:** Codex (OpenAI).
 - **What I asked for:** A fixed username and password for one owner, with no registration, to prevent unauthenticated crawlers from reading the journal.
@@ -49,7 +48,7 @@ claim that I independently wrote every file committed under my GitHub account.
 - **What I kept, what I changed, and why:** I kept the one-owner design instead of adding multi-user accounts. Credentials belong on the server, and the browser-only mock API was disabled so it could not bypass the private API. The protection blocks unauthenticated access generally; it does not identify AI crawlers specifically.
 - **Commit:** [Owner authentication](https://github.com/ninapascua/Sipori/commit/78a69a672f301ebf82633fcde453d0bc28bd9fc3).
 
-### 2026-10-03 â€” Code review and deployment preparation
+### 2026-10-03 - Code review and deployment preparation
 
 - **Tool:** Codex (OpenAI).
 - **What I asked for:** A review of the project files and a check of deployment readiness.
@@ -57,7 +56,7 @@ claim that I independently wrote every file committed under my GitHub account.
 - **What I kept, what I changed, and why:** I kept the fixes that addressed concrete problems. The assistant reported successful tests, builds, and clean dependency audits at that time. Docker itself was not run because it was unavailable. Remaining security checks are recorded in SECURITY-CHECKLIST.md.
 - **Commit:** [Review fixes and configuration](https://github.com/ninapascua/Sipori/commit/d07fcadbc0e8455bd1a444d5a74965c7f382cddd).
 
-### 2026-10-03 â€” Delete empty shops
+### 2026-10-03 - Delete empty shops
 
 - **Tool:** Codex (OpenAI).
 - **What I asked for:** Automatically delete a shop when its last drink is deleted, warn before doing so.
@@ -86,7 +85,7 @@ claim that I independently wrote every file committed under my GitHub account.
 
 ### Written by me
 
-#### CafÃ© and drink behavior
+#### Cafe and drink behavior
 
 - **File:** `client/src/App.jsx` and related cafÃ© and drink components.
 - **Commit:** [https://github.com/ninapascua/Sipori/commit/0409e06b7c3b76c7eeafbdcb154e874daa47ed92](https://github.com/ninapascua/Sipori/commit/0409e06b7c3b76c7eeafbdcb154e874daa47ed92)
@@ -110,5 +109,5 @@ My own coding was spread across the project rather than contained in one feature
 
 - **File:** `client/src/App.jsx`,  `client/src/components/`, `client/src/api/`, `server/cafeRoutes.js`, `server/cafesRepo.js`, and the authentication-related server files.
 - **Commit:** [https://github.com/ninapascua/Sipori/commit/0409e06b7c3b76c7eeafbdcb154e874daa47ed92](https://github.com/ninapascua/Sipori/commit/78a69a672f301ebf82633fcde453d0bc28bd9fc3)[https://github.com/ninapascua/Sipori/commit/8e1c7937d840192123a371f75f8803eb4588ede3]
-- **What it does and why we kept it:** I understand the overall flow of Sipori and how the main parts work together. The React frontend controls what the user sees and keeps track of the current cafÃ©, drink, and page state. When data needs to be loaded or changed, the frontend sends requests through the API instead of changing the database directly. The Express backend receives those requests, checks authentication and input where required, and uses the repository/database code to read or update PostgreSQL. I also understand the main cafÃ© and drink flows. Adding or editing information sends the changes to the backend and the frontend updates after the request succeeds. Deleting a drink also involves backend logic that checks whether its cafÃ© has any drinks left and removes the cafÃ© when it becomes empty. The single-owner authentication protects the private API so the journal is not openly readable without logging in. I kept these parts because they provide the main structure and behavior the application needs, and I tested and reviewed them throughout development.
+- **What it does and why we kept it:** I understand the overall flow of Sipori and how the main parts work together. The React frontend controls what the user sees and keeps track of the current cafÃ©, drink, and page state. When data needs to be loaded or changed, the frontend sends requests through the API instead of changing the database directly. The Express backend receives those requests, checks authentication and input where required, and uses the repository/database code to read or update PostgreSQL. I also understand the main cafe and drink flows. Adding or editing information sends the changes to the backend and the frontend updates after the request succeeds. Deleting a drink also involves backend logic that checks whether its cafÃ© has any drinks left and removes the cafÃ© when it becomes empty. The single-owner authentication protects the private API so the journal is not openly readable without logging in. I kept these parts because they provide the main structure and behavior the application needs, and I tested and reviewed them throughout development.
 
