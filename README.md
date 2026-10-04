@@ -12,7 +12,15 @@ Sipori is a private cafe journal for a single owner to record, rate, and look ba
 
 Live mode requires owner login. Demo mode opens a separate browser-only sample journal without login. There is no public registration or default password. Configure your own credentials with `npm run auth:setup` in `server/`.
 
-**Screenshot:** To be added. 
+## Screenshots
+
+![Login](docs/assets/screenshot4.png)
+
+![Cafe home](docs/assets/screenshot.png)
+
+![Cafe page](docs/assets/screenshot2.png)
+
+![Scrapbook](docs/assets/screenshot3.png)
 
 ## What it does
 
