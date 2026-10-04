@@ -8,11 +8,12 @@ Sipori is a private cafe journal for a single owner to record, rate, and look ba
 
 **API:** [Backend health check](https://sipori-api.onrender.com/healthz)
 
-**Demo video:** Not yet available.
+**Demo video:** [Final Project Presentation](https://drive.google.com/drive/folders/1ekUwIKaVc59PJDiRf3HAXA72kOFYK8p2?usp=sharing)
 
 Live mode requires owner login. Demo mode opens a separate browser-only sample journal without login. There is no public registration or default password. Configure your own credentials with `npm run auth:setup` in `server/`.
 
-**Screenshot:** To be added. The repository does not yet contain a screenshot of the main screen.
+**Screenshot:** ![Uploading image.png…]()
+
 
 ## What it does
 
