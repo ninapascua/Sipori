@@ -213,7 +213,6 @@ The browser loads the React frontend from Render and sends requests to the Expre
 
 [ninapascua](https://github.com/ninapascua)
 
-**Course and section:** To be added.
 
 ## AI use
 
