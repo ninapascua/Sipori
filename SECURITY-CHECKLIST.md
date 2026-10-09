@@ -65,12 +65,6 @@ The repository includes .github/workflows/deploy-pages.yml, which deploys the fr
 | 30 | Images, fonts and other assets are original, licensed, or credited | Yes | Images, fonts, and other assets are original, licensed, or credited. |
 | 31 | Repository visibility is deliberate and was checked after the last push | Yes | Repository visibility was checked after the last push and matches the intended setting. |
 
-## Findings and fixes
+## Anything I found and fixed
 
-The error handler previously logged whole error objects, which could include sensitive request details. It now logs only an error code or name and returns safe responses for malformed or oversized JSON. Server-side date validation rejects year zero before it reaches PostgreSQL. Docker/Compose configuration includes the shared validation files and required owner-login environment variables.
-
-## Accepted limitation
-
-The remaining No items are workflow SHA pinning (item 11) and a restricted production database role (item 15).
-
-The remote database connection uses encrypted TLS with certificate verification disabled (`rejectUnauthorized: false` in `server/db/pool.js`). This remains an accepted limitation; certificate verification has not been fixed.
+The checklist caught error logging that could expose sensitive details, a missing server-side check for year-zero dates, and missing shared validation files and owner-login environment variables in the Docker/Compose configuration. These were addressed by logging only error codes or names, returning safe responses for malformed or oversized JSON, rejecting year-zero dates, and updating the container configuration. The review also confirmed that workflow actions use version tags and the deployed database connection uses the administrative `postgres` role; those two items remain No because they have not been changed.
