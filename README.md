@@ -157,7 +157,7 @@ Keep the existing database and owner credentials. After deploying, open `https:/
 | Start command | `npm start --prefix server` |
 | Health check path | `/healthz` |
 
-Set the server environment variables in Render. Use `NODE_ENV=production`, the real database connection and owner settings, and the exact frontend origin in `CORS_ORIGINS`. Apply `server/db/schema.sql` to a new database before use. Keep the API on one instance while sessions and rate limits are stored in memory.
+Set the server environment variables in Render. Use `NODE_ENV=production`, the real database connection and owner settings, and the exact frontend origin in `CORS_ORIGINS`. Apply `server/db/schema.sql` to a new database before use.
 
 For a separate demo fallback deployment, set `VITE_USE_MOCK_API=true` on the frontend and rebuild. Keep the live frontend set to `false`.
 
@@ -171,7 +171,7 @@ For a separate demo fallback deployment, set `VITE_USE_MOCK_API=true` on the fro
 | `VITE_API_BASE_URL` | The HTTPS backend URL, without a trailing slash |
 | `VITE_BASE_PATH` | `/` |
 
-After Render assigns the frontend URL, update the backend's `CORS_ORIGINS` to match. Set `AUTH_CROSS_SITE=true` when the frontend and API are on different sites. Browsers can block those cross-site session cookies; the current iPhone login issue is why the same-origin setup above is planned. Rebuild the frontend after changing its build-time environment variables, and redeploy the backend after changing its configuration. Test login, logout, and journal operations on the live frontend.
+After Render assigns the frontend URL, update the backend's `CORS_ORIGINS` to match. Set `AUTH_CROSS_SITE=true` when the frontend and API are on different sites. Rebuild the frontend after changing its build-time environment variables, and redeploy the backend after changing its configuration. Test login, logout, and journal operations on the live frontend.
 
 **Alternative frontend on GitHub Pages:** the workflow is in [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml). Select GitHub Actions as the Pages source, add `VITE_API_BASE_URL` as a repository Actions variable, and run the workflow. It sets the repository base path automatically. Update the backend's allowed origin to the GitHub Pages origin, without the repository path. Set the repository variable `VITE_USE_MOCK_API=true` to publish the demo fallback, or `false` for live mode, then rebuild. This workflow deploys only the frontend.
 
@@ -206,7 +206,6 @@ The browser loads the React frontend from Render and sends requests to the Expre
 
 ## What I would do next
 
-- Deploy the same-origin setup and verify iPhone login, then persist sessions and rate limits so backend restarts do not discard them.
 - Add registration and separate private journals for each account, with database ownership checks and account recovery.
 - Let users browse previous scrapbook months and move photos to dedicated image storage as journals grow.
 

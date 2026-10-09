@@ -12,6 +12,10 @@ Sipori is a personal log where a matcha and hojicha lover keeps track of the caf
 
 It is for someone who tries matcha and hojicha drinks from different cafes and forgets which ones were worth ordering again—in this case, me. When I open it, I am logging a drink I just finished, checking what was good at a cafe before ordering, or looking back at what I drank this month. Sipori remains a single-owner journal, but the live version now requires my configured username and password. There is no public registration.
 
+## Why there is no map integration
+
+I chose not to include Google Maps or other map integration because many of the matcha shops I visit operate as pop-ups at flea markets or temporary events and do not have permanent physical stores. A fixed map location would not always reflect where they are currently operating. Sipori therefore focuses on recording shops and drinks I have tried, with photos, ratings, and notes.
+
 ## Sections or routes
 
 | # | Section / route | What it is for |
@@ -94,7 +98,7 @@ In live mode, cafes and drinks are stored in PostgreSQL and served by Express. R
 
 ## One risk
 
-My original main risk was connecting React to Express/PostgreSQL, handling photos, and saving a cafe together with its first drink. Those flows now work through a shared API interface, server validation, and database transactions. A current issue is phone login: PC testing worked, but my iPhone reported a cookie-settings message. A same-origin hosting option is prepared locally and still needs deployment and retesting. Sessions and login limits reset on API restart, and photos can consume database or browser-storage quota.
+My original main risk was connecting React to Express/PostgreSQL, handling photos, and saving a cafe together with its first drink. Those flows now work through a shared API interface, server validation, and database transactions.
 
 ## What changed from the original proposal
 
@@ -115,4 +119,4 @@ My original main risk was connecting React to Express/PostgreSQL, handling photo
 - **Core features.** Cafe/drink logging, search/filtering, edit/delete, owner login, and the current-month scrapbook are implemented. Deferred work includes earlier-month scrapbook browsing and opening details from scrapbook photos. Future expansion includes registration/private user journals, photo storage, insights, and exports.
 - **Where each piece is hosted.** The documented frontend is [sipori.onrender.com](https://sipori.onrender.com/#/), the Express API is [sipori-api.onrender.com](https://sipori-api.onrender.com/healthz), and PostgreSQL is hosted on Supabase. 
 - **The date demo mode goes off.** The main website was completed and deployed by October 3; the exact first switch-off date is not recorded. False or unset VITE_USE_MOCK_API uses live mode. Exact true enables a separate sample-data/localStorage fallback. Changing modes requires a restart/rebuild; live errors do not automatically enable demo mode.
-- **Risks.** The original API, first-drink handoff, and scrapbook concerns have reduced through implementation and local tests. Phone login, process-local sessions/login limits, storage usage, and the changes needed for future multi-user ownership remain work to address.
+- **Risks.** The original API, first-drink handoff, and scrapbook concerns have reduced through implementation and local tests. The changes needed for future multi-user ownership remain work to address.

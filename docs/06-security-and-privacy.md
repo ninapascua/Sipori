@@ -52,6 +52,6 @@ The half that matters more, because it is about other people.
 
 ## Risks and known limitations
 
-The main risk for my project was exposing a personal journal without proper access control. I added single-owner login, salted password hashing, session expiry and logout, login rate limiting, and server-side protection for every live cafe/drink route. I accepted that sessions and login limits are stored in memory and reset when the API restarts; the demo fallback is intentionally public and uses separate browser-local sample data. I still need to confirm the remaining hosting and privacy items rather than mark them complete without evidence.
+The main risk for my project was exposing a personal journal without proper access control. I added single-owner login, salted password hashing, session expiry and logout, login rate limiting, and server-side protection for every live cafe/drink route. The demo fallback is intentionally public and uses separate browser-local sample data. I still need to confirm the remaining hosting and privacy items rather than mark them complete without evidence.
 
 
